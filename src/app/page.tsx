@@ -1,189 +1,60 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Task, CreateTaskInput, TaskStatus, MATA_KULIAH_LIST } from '@/types/task';
+import React from 'react';
+import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
-import { TaskFilterBar } from '@/components/TaskFilterBar';
 import { UrgentTasksSection } from '@/components/UrgentTasksSection';
-import { TaskTable } from '@/components/TaskTable';
 import { TaskModal } from '@/components/TaskModal';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
-import { Info, RefreshCw } from 'lucide-react';
+import { useTasks } from '@/hooks/useTasks';
+import { getDaysUntilDeadline, formatDeadlineDisplay, formatDeadlineRelative } from '@/lib/date-utils';
+import {
+  Clock,
+  AlertCircle,
+  CheckCircle2,
+  ListTodo,
+  ArrowRight,
+  PlusCircle,
+  RefreshCw,
+  Info,
+} from 'lucide-react';
 
 export default function DashboardPage() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isConfigured, setIsConfigured] = useState(true);
-  const [missingEnvs, setMissingEnvs] = useState<string[]>([]);
+  const {
+    tasks,
+    loading,
+    refreshing,
+    error,
+    isConfigured,
+    missingEnvs,
+    fetchTasks,
+    handleToggleStatus,
+    handleSaveTask,
+    handleConfirmDelete,
+    isModalOpen,
+    setIsModalOpen,
+    editingTask,
+    setEditingTask,
+    deletingTask,
+    setDeletingTask,
+    isDeleting,
+    togglingNo,
+  } = useTasks();
 
-  // Filters & Search
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'ALL' | TaskStatus>('ALL');
-  const [matkulFilter, setMatkulFilter] = useState('ALL');
+  const totalCount = tasks.length;
+  const pendingTasks = tasks.filter((t) => t.status === 'Belum Selesai');
+  const pendingCount = pendingTasks.length;
+  const completedCount = tasks.filter((t) => t.status === 'Selesai').length;
+  const urgentCount = tasks.filter((t) => {
+    if (t.status !== 'Belum Selesai') return false;
+    const diff = getDaysUntilDeadline(t.deadline);
+    return diff <= 3;
+  }).length;
 
-  // Modals
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [deletingTask, setDeletingTask] = useState<Task | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [togglingNo, setTogglingNo] = useState<number | null>(null);
-
-  // Fetch all tasks
-  const fetchTasks = useCallback(async (isRefresh = false) => {
-    try {
-      if (isRefresh) setRefreshing(true);
-      else setLoading(true);
-      setError(null);
-
-      const res = await fetch('/api/tasks');
-      const json = await res.json();
-
-      if (!res.ok || !json.success) {
-        throw new Error(json.error || 'Gagal mengambil data tugas.');
-      }
-
-      setTasks(json.data || []);
-      if (typeof json.isConfigured === 'boolean') {
-        setIsConfigured(json.isConfigured);
-      }
-      if (Array.isArray(json.missingEnvs)) {
-        setMissingEnvs(json.missingEnvs);
-      } else {
-        setMissingEnvs([]);
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Terjadi kesalahan jaringan.';
-      setError(msg);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
-
-  // Unique list of matkuls for dropdown
-  const uniqueMatkuls = useMemo(() => {
-    const list = tasks.map((t) => t.matkul.trim()).filter(Boolean);
-    const combined = Array.from(new Set([...MATA_KULIAH_LIST, ...list]));
-    return combined;
-  }, [tasks]);
-
-  // Filtered & sorted tasks
-  const filteredTasks = useMemo(() => {
-    return tasks.filter((task) => {
-      // Filter by Status
-      if (statusFilter !== 'ALL' && task.status !== statusFilter) {
-        return false;
-      }
-      // Filter by Matkul
-      if (matkulFilter !== 'ALL' && task.matkul !== matkulFilter) {
-        return false;
-      }
-      // Filter by Search Query
-      if (search.trim()) {
-        const query = search.toLowerCase();
-        const matchMatkul = task.matkul.toLowerCase().includes(query);
-        const matchTugas = task.tugas.toLowerCase().includes(query);
-        const matchKet = task.keterangan?.toLowerCase().includes(query);
-        if (!matchMatkul && !matchTugas && !matchKet) return false;
-      }
-      return true;
-    });
-  }, [tasks, statusFilter, matkulFilter, search]);
-
-  // Toggle status
-  const handleToggleStatus = async (no: number) => {
-    try {
-      setTogglingNo(no);
-      // Optimistic update
-      setTasks((prev) =>
-        prev.map((t) =>
-          t.no === no
-            ? { ...t, status: t.status === 'Selesai' ? 'Belum Selesai' : 'Selesai' }
-            : t
-        )
-      );
-
-      const res = await fetch(`/api/tasks/${no}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'toggle-status' }),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) {
-        throw new Error(json.error || 'Gagal mengubah status.');
-      }
-
-      setTasks((prev) => prev.map((t) => (t.no === no ? json.data : t)));
-    } catch (err) {
-      console.error(err);
-      await fetchTasks(true);
-    } finally {
-      setTogglingNo(null);
-    }
-  };
-
-  // Create or Update task
-  const handleSaveTask = async (data: CreateTaskInput) => {
-    if (editingTask) {
-      const res = await fetch(`/api/tasks/${editingTask.no}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) {
-        throw new Error(json.error || 'Gagal memperbarui tugas.');
-      }
-      setTasks((prev) => prev.map((t) => (t.no === editingTask.no ? json.data : t)));
-    } else {
-      const res = await fetch('/api/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) {
-        throw new Error(json.error || 'Gagal menambahkan tugas.');
-      }
-      setTasks((prev) => [...prev, json.data].sort((a, b) => a.deadline.localeCompare(b.deadline)));
-    }
-  };
-
-  // Delete task
-  const handleConfirmDelete = async () => {
-    if (!deletingTask) return;
-    try {
-      setIsDeleting(true);
-      const res = await fetch(`/api/tasks/${deletingTask.no}`, {
-        method: 'DELETE',
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) {
-        throw new Error(json.error || 'Gagal menghapus tugas.');
-      }
-      setTasks((prev) => prev.filter((t) => t.no !== deletingTask.no));
-      setDeletingTask(null);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Terjadi kesalahan saat menghapus.';
-      alert(msg);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
-  const hasActiveFilters = Boolean(search || statusFilter !== 'ALL' || matkulFilter !== 'ALL');
-
-  const handleResetFilters = () => {
-    setSearch('');
-    setStatusFilter('ALL');
-    setMatkulFilter('ALL');
-  };
+  // Next upcoming tasks (sorted by nearest deadline)
+  const upcomingTasks = [...pendingTasks]
+    .sort((a, b) => getDaysUntilDeadline(a.deadline) - getDaysUntilDeadline(b.deadline))
+    .slice(0, 4);
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-black flex flex-col font-hand">
@@ -195,7 +66,7 @@ export default function DashboardPage() {
         isConfigured={isConfigured}
       />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-7">
         {/* Setup Notification Banner when in Demo Mode */}
         {!isConfigured && (
           <div className="sketch-card p-4 sm:p-5 flex items-start gap-3 text-black">
@@ -229,10 +100,10 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-black">
-              Daftar Tugas Kuliah
+              Dashboard Kuliah
             </h2>
             <p className="text-sm text-zinc-600 mt-0.5">
-              Pantau deadline dan kelola tugas kuliah secara terpusat.
+              Ringkasan progres belajar dan pantauan deadline tugas terdekat.
             </p>
           </div>
 
@@ -250,22 +121,53 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Filter & Search Bar */}
-        <TaskFilterBar
-          tasks={tasks}
-          search={search}
-          onSearchChange={setSearch}
-          statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
-          matkulFilter={matkulFilter}
-          onMatkulFilterChange={setMatkulFilter}
-          uniqueMatkuls={uniqueMatkuls}
-        />
+        {/* Overview Stat Cards (B&W Sketch Style) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="sketch-card p-4 sm:p-5 flex items-center justify-between">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600">Total Tugas</div>
+              <div className="text-3xl font-black text-black mt-0.5">{totalCount}</div>
+            </div>
+            <div className="w-10 h-10 sketch-border-sm flex items-center justify-center bg-white text-black">
+              <ListTodo className="w-5 h-5 stroke-[2.5]" />
+            </div>
+          </div>
 
-        {/* Section 1: DEADLINE DEKAT (≤3 hari) */}
+          <div className="sketch-card p-4 sm:p-5 flex items-center justify-between">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600">Belum Selesai</div>
+              <div className="text-3xl font-black text-black mt-0.5">{pendingCount}</div>
+            </div>
+            <div className="w-10 h-10 sketch-border-sm flex items-center justify-center bg-white text-black">
+              <Clock className="w-5 h-5 stroke-[2.5]" />
+            </div>
+          </div>
+
+          <div className="sketch-card p-4 sm:p-5 flex items-center justify-between">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600">Deadline ≤ 3 Hari</div>
+              <div className="text-3xl font-black text-black mt-0.5">{urgentCount}</div>
+            </div>
+            <div className="w-10 h-10 sketch-border-sm flex items-center justify-center bg-white text-black">
+              <AlertCircle className="w-5 h-5 stroke-[2.5]" />
+            </div>
+          </div>
+
+          <div className="sketch-card p-4 sm:p-5 flex items-center justify-between">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600">Selesai</div>
+              <div className="text-3xl font-black text-black mt-0.5">{completedCount}</div>
+            </div>
+            <div className="w-10 h-10 sketch-border-sm flex items-center justify-center bg-white text-black">
+              <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+            </div>
+          </div>
+        </div>
+
+        {/* Section: Urgent Tasks */}
         {!loading && !error && (
           <UrgentTasksSection
-            tasks={filteredTasks}
+            tasks={tasks}
             onToggleStatus={handleToggleStatus}
             onEdit={(task) => {
               setEditingTask(task);
@@ -278,28 +180,99 @@ export default function DashboardPage() {
           />
         )}
 
-        {/* Section 2: SEMUA TUGAS Table / Cards */}
-        <TaskTable
-          tasks={filteredTasks}
-          loading={loading}
-          error={error}
-          onRetry={() => fetchTasks()}
-          onAddNew={() => {
-            setEditingTask(null);
-            setIsModalOpen(true);
-          }}
-          onToggleStatus={handleToggleStatus}
-          onEdit={(task) => {
-            setEditingTask(task);
-            setIsModalOpen(true);
-          }}
-          onDelete={(task) => {
-            setDeletingTask(task);
-          }}
-          togglingNo={togglingNo}
-          hasFilters={hasActiveFilters}
-          onClearFilters={handleResetFilters}
-        />
+        {/* Section: Upcoming Tasks Preview & Quick Links */}
+        <section aria-labelledby="upcoming-heading" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="sketch-border-sm px-3 py-0.5 text-xs font-bold uppercase tracking-wider text-black bg-white">
+              Tugas Aktif Segera Dikumpulkan
+            </span>
+
+            <Link
+              href="/tugas"
+              className="sketch-btn inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold bg-white text-black hover:bg-zinc-100 cursor-pointer"
+            >
+              <span>Lihat Semua ({totalCount})</span>
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+            </Link>
+          </div>
+
+          {upcomingTasks.length === 0 ? (
+            <div className="sketch-border bg-white border-dashed p-8 text-center space-y-3">
+              <div className="text-lg font-bold text-black">
+                🎉 Hore! Tidak ada tugas yang tertunda.
+              </div>
+              <p className="text-xs sm:text-sm text-zinc-600 max-w-sm mx-auto">
+                Semua tugas kuliah Anda sudah selesai atau belum ada tugas yang ditambahkan.
+              </p>
+              <div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingTask(null);
+                    setIsModalOpen(true);
+                  }}
+                  className="sketch-btn inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-white bg-black hover:bg-zinc-800 cursor-pointer"
+                >
+                  <PlusCircle className="w-4 h-4 stroke-[2.5]" />
+                  <span>Tambah Tugas Baru</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {upcomingTasks.map((t) => (
+                <div
+                  key={t.no}
+                  className="sketch-card p-4 flex flex-col justify-between"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="sketch-border-sm px-2 py-0.5 text-xs font-bold bg-white text-black">
+                        {t.matkul}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-zinc-500">#{t.no}</span>
+                    </div>
+                    <h4 className="text-base font-bold text-black leading-snug">
+                      {t.tugas}
+                    </h4>
+                    {t.keterangan && (
+                      <p className="text-xs text-zinc-600 line-clamp-1">{t.keterangan}</p>
+                    )}
+                  </div>
+
+                  <div className="mt-3 pt-2.5 border-t-2 border-dashed border-black/15 flex items-center justify-between text-xs font-bold text-black">
+                    <span>{formatDeadlineDisplay(t.deadline)}</span>
+                    <span className="sketch-border-sm px-1.5 py-0.2 bg-white">
+                      {formatDeadlineRelative(t.deadline)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Quick Action Banner */}
+        <section className="sketch-card p-5 sm:p-6 bg-zinc-50 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-1 text-center sm:text-left">
+            <h3 className="text-xl font-bold text-black">
+              Kelola Seluruh Arsip Tugas
+            </h3>
+            <p className="text-xs sm:text-sm text-zinc-600">
+              Buka halaman List Tugas untuk melakukan pencarian mendalam, filter mata kuliah, dan pengeditan tugas.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Link
+              href="/tugas"
+              className="sketch-btn inline-flex items-center gap-2 px-5 py-2 text-sm font-bold text-white bg-black hover:bg-zinc-800 cursor-pointer min-h-[40px]"
+            >
+              <span>Buka List Tugas</span>
+              <ArrowRight className="w-4 h-4 stroke-[3]" />
+            </Link>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
