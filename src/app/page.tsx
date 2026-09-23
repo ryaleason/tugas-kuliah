@@ -186,7 +186,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fbfbfb] text-black flex flex-col font-sans">
+    <div className="min-h-screen bg-[#f8fafc] text-zinc-900 flex flex-col font-sans">
       <Navbar
         onAddNew={() => {
           setEditingTask(null);
@@ -195,33 +195,30 @@ export default function DashboardPage() {
         isConfigured={isConfigured}
       />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-7">
-        {/* Setup Notification Banner when in Demo Mode (Saweria Info Box style) */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+        {/* Setup Notification Banner when in Demo Mode */}
         {!isConfigured && (
-          <div className="p-5 sm:p-6 rounded-2xl bg-white border-2 border-black shadow-[5px_5px_0px_#000] flex items-start gap-3.5 font-mono">
-            <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 border-2 border-black shadow-[2px_2px_0px_#000]">
-              <Info className="w-4 h-4 text-white stroke-[2.5]" />
-            </div>
-            <div className="text-xs sm:text-sm text-black space-y-1.5 leading-relaxed">
+          <div className="p-4 sm:p-5 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-3 text-amber-900">
+            <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="text-xs sm:text-sm space-y-1">
               <div>
-                <span className="font-black bg-black text-white px-1.5 py-0.5 rounded text-xs mr-1.5">MODE DEMO</span>
-                <span className="font-bold">Google Sheets Belum Terhubung:</span> Data saat ini disimpan sementara di memori server.
+                <span className="font-semibold mr-1.5">Mode Demo:</span>
+                Google Sheets belum terhubung. Data saat ini disimpan sementara di memori server.
               </div>
               {missingEnvs.length > 0 ? (
-                <div className="text-xs text-zinc-700">
-                  Variabel environment berikut belum terbaca oleh server Vercel:{' '}
-                  <span className="font-mono font-black border border-black bg-zinc-100 px-1.5 py-0.5 rounded text-black">
+                <div className="text-xs text-amber-800">
+                  Variabel environment berikut belum terbaca:{' '}
+                  <span className="font-mono bg-amber-100/80 px-1 py-0.5 rounded text-amber-950 font-medium">
                     {missingEnvs.join(', ')}
                   </span>
-                  . Pastikan variabel sudah ditambahkan di Project Settings &gt; Environment Variables dan lakukan Redeploy.
+                  . Pastikan sudah ditambahkan di Project Settings &gt; Environment Variables.
                 </div>
               ) : (
-                <div className="text-xs text-zinc-700">
-                  Variabel environment terdeteksi, namun kredensial belum valid atau belum tersambung ke Sheet.{' '}
-                  <a href="/api/debug-env" target="_blank" rel="noreferrer" className="underline font-bold hover:text-black">
+                <div className="text-xs text-amber-800">
+                  Variabel terdeteksi namun belum terhubung.{' '}
+                  <a href="/api/debug-env" target="_blank" rel="noreferrer" className="underline font-medium hover:text-amber-950">
                     Buka /api/debug-env
-                  </a>{' '}
-                  untuk melihat status diagnostik.
+                  </a>
                 </div>
               )}
             </div>
@@ -231,10 +228,10 @@ export default function DashboardPage() {
         {/* Header Title & Refresh Button */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-black flex items-center gap-2">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900">
               Daftar Tugas Kuliah
             </h2>
-            <p className="text-xs sm:text-sm font-mono text-zinc-600 mt-1">
+            <p className="text-sm text-zinc-500 mt-1">
               Pantau deadline dan kelola tugas kuliah secara terpusat.
             </p>
           </div>
@@ -245,9 +242,9 @@ export default function DashboardPage() {
               onClick={() => fetchTasks(true)}
               disabled={refreshing || loading}
               aria-label="Segarkan data tugas"
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-bold font-mono text-black bg-[#85D7E8] hover:bg-[#68CBE0] border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px]"
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-zinc-700 bg-white hover:bg-zinc-50 border border-zinc-200/80 rounded-lg shadow-xs transition-colors cursor-pointer min-h-[38px] disabled:opacity-50"
             >
-              <RefreshCw className={`w-3.5 h-3.5 stroke-[2.5] ${refreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
               <span>{refreshing ? 'Memperbarui...' : 'Segarkan Data'}</span>
             </button>
           </div>
@@ -265,7 +262,7 @@ export default function DashboardPage() {
           uniqueMatkuls={uniqueMatkuls}
         />
 
-        {/* Section 1: DEADLINE DEKAT (≤3 hari) as per design.md Section 1.1 */}
+        {/* Section 1: DEADLINE DEKAT (≤3 hari) */}
         {!loading && !error && (
           <UrgentTasksSection
             tasks={filteredTasks}
@@ -281,7 +278,7 @@ export default function DashboardPage() {
           />
         )}
 
-        {/* Section 2: SEMUA TUGAS Table / Cards as per design.md Section 1.1 */}
+        {/* Section 2: SEMUA TUGAS Table / Cards */}
         <TaskTable
           tasks={filteredTasks}
           loading={loading}
@@ -305,8 +302,8 @@ export default function DashboardPage() {
         />
       </main>
 
-      {/* Footer: Saweria style badge */}
-      <footer className="mt-auto border-t-2 border-black bg-white py-6 text-center text-xs font-mono font-bold text-black">
+      {/* Footer */}
+      <footer className="mt-auto border-t border-zinc-200/80 bg-white py-6 text-center text-xs text-zinc-500">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
             tugas-kuliah.co

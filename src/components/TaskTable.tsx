@@ -34,13 +34,13 @@ export function TaskTable({
 }: TaskTableProps) {
   if (loading) {
     return (
-      <div className="rounded-2xl border-2 border-black bg-white p-6 space-y-4 shadow-[4px_4px_0px_#000]">
-        <div className="h-6 bg-zinc-200 rounded-lg w-40 animate-pulse border border-black/20" />
+      <div className="rounded-xl border border-zinc-200/80 bg-white p-6 space-y-4 shadow-xs">
+        <div className="h-5 bg-zinc-200/80 rounded w-36 animate-pulse" />
         <div className="space-y-3">
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="h-16 bg-zinc-100 rounded-xl animate-pulse border-2 border-black/20"
+              className="h-14 bg-zinc-100/80 rounded-lg animate-pulse"
             />
           ))}
         </div>
@@ -50,21 +50,23 @@ export function TaskTable({
 
   if (error) {
     return (
-      <div className="rounded-2xl border-2 border-black bg-white p-8 sm:p-10 text-center space-y-4 shadow-[5px_5px_0px_#000]">
-        <div className="inline-flex p-3 rounded-xl bg-zinc-100 border-2 border-black text-black shadow-[2px_2px_0px_#000]">
-          <AlertTriangle className="w-6 h-6 text-black" />
+      <div className="rounded-xl border border-zinc-200/80 bg-white p-8 sm:p-10 text-center space-y-4 shadow-xs">
+        <div className="inline-flex p-3 rounded-full bg-rose-50 text-rose-600">
+          <AlertTriangle className="w-6 h-6 stroke-[2]" />
         </div>
-        <h3 className="text-lg font-black text-black font-mono">
-          Gagal Memuat Data
-        </h3>
-        <p className="text-sm font-mono text-zinc-700 max-w-md mx-auto">
-          {error}
-        </p>
+        <div>
+          <h3 className="text-base font-semibold text-zinc-900">
+            Gagal Memuat Data
+          </h3>
+          <p className="text-sm text-zinc-500 mt-1 max-w-md mx-auto">
+            {error}
+          </p>
+        </div>
         <div>
           <button
             type="button"
             onClick={onRetry}
-            className="inline-flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-bold font-mono text-white bg-black hover:bg-zinc-800 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-zinc-900 hover:bg-zinc-800 rounded-lg shadow-xs transition-colors cursor-pointer"
           >
             Coba Lagi
           </button>
@@ -75,15 +77,15 @@ export function TaskTable({
 
   if (tasks.length === 0) {
     return (
-      <div className="rounded-2xl border-2 border-dashed border-black bg-white p-10 sm:p-12 text-center space-y-4 shadow-[4px_4px_0px_#000]">
-        <div className="inline-flex p-4 rounded-2xl bg-zinc-100 border-2 border-black text-black shadow-[3px_3px_0px_#000]">
-          <Inbox className="w-8 h-8 text-black" />
+      <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-10 sm:p-12 text-center space-y-4 shadow-xs">
+        <div className="inline-flex p-3.5 rounded-full bg-zinc-100 text-zinc-400">
+          <Inbox className="w-7 h-7 stroke-[1.75]" />
         </div>
         <div>
-          <h3 className="text-lg font-black text-black">
+          <h3 className="text-base font-semibold text-zinc-900">
             {hasFilters ? 'Tidak ada tugas yang cocok' : 'Belum ada tugas kuliah'}
           </h3>
-          <p className="text-xs sm:text-sm font-mono text-zinc-600 mt-1 max-w-sm mx-auto">
+          <p className="text-sm text-zinc-500 mt-1 max-w-sm mx-auto">
             {hasFilters
               ? 'Sesuaikan kata kunci pencarian atau ubah filter status/mata kuliah.'
               : 'Tambahkan tugas kuliah pertama Anda atau catat langsung lewat Telegram Bot.'}
@@ -94,7 +96,7 @@ export function TaskTable({
             <button
               type="button"
               onClick={onClearFilters}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-bold font-mono text-black bg-white hover:bg-zinc-100 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 text-sm font-medium text-zinc-700 bg-white hover:bg-zinc-50 border border-zinc-300 rounded-lg shadow-xs transition-colors cursor-pointer"
             >
               Reset Filter
             </button>
@@ -102,9 +104,9 @@ export function TaskTable({
             <button
               type="button"
               onClick={onAddNew}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-bold font-mono text-black bg-[#F6AF23] hover:bg-[#E59E15] rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-zinc-900 hover:bg-zinc-800 rounded-lg shadow-xs transition-colors cursor-pointer"
             >
-              <PlusCircle className="w-4 h-4 stroke-[2.5]" />
+              <PlusCircle className="w-4 h-4 stroke-[2]" />
               Tambah Tugas
             </button>
           )}
@@ -116,21 +118,21 @@ export function TaskTable({
   return (
     <section aria-labelledby="all-tasks-heading" className="space-y-3">
       <div className="flex items-center justify-between">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border-2 border-black bg-[#BAE6FD] text-sky-950 font-mono text-xs font-black shadow-[2px_2px_0px_#000]">
-          <span>SEMUA TUGAS &bull; {tasks.length} TOTAL</span>
-        </span>
+        <div className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          Semua Tugas ({tasks.length})
+        </div>
       </div>
 
-      {/* Desktop Table View: Saweria Neo-Brutalist Table */}
-      <div className="hidden md:block rounded-2xl border-2 border-black bg-white overflow-hidden shadow-[5px_5px_0px_#000]">
+      {/* Desktop Table View: Clean & High Legibility */}
+      <div className="hidden md:block rounded-xl border border-zinc-200/80 bg-white overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b-2 border-black bg-[#FAF8F5] text-xs font-black font-mono text-black uppercase tracking-wider">
+              <tr className="border-b border-zinc-200/80 bg-zinc-50/70 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
                 <th className="py-3 px-4 w-14 text-center" scope="col">
                   No
                 </th>
-                <th className="py-3 px-3 w-40" scope="col">
+                <th className="py-3 px-3 w-44" scope="col">
                   Matkul
                 </th>
                 <th className="py-3 px-3" scope="col">
@@ -147,7 +149,7 @@ export function TaskTable({
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-zinc-100">
               {tasks.map((task) => (
                 <TaskRow
                   key={task.no}
@@ -164,7 +166,7 @@ export function TaskTable({
       </div>
 
       {/* Mobile Card List View */}
-      <div className="md:hidden space-y-3">
+      <div className="md:hidden space-y-2.5">
         {tasks.map((task) => (
           <TaskRow
             key={task.no}

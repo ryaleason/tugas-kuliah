@@ -7,7 +7,7 @@ import {
   formatDeadlineRelative,
   getUrgencyLevel,
 } from '@/lib/date-utils';
-import { AlertCircle, Calendar, Edit2, Trash2 } from 'lucide-react';
+import { AlertCircle, Calendar, Check, Edit2, Trash2 } from 'lucide-react';
 
 interface UrgentTasksSectionProps {
   tasks: Task[];
@@ -37,9 +37,9 @@ export function UrgentTasksSection({
   return (
     <section aria-labelledby="urgent-heading" className="space-y-3">
       <div className="flex items-center gap-2">
-        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-black bg-[#FDA4AF] text-black font-mono text-xs font-black shadow-[2px_2px_0px_#000]">
-          <AlertCircle className="w-4 h-4 text-black stroke-[3]" />
-          <span>DEADLINE DEKAT (&le; 3 HARI) &bull; {urgentTasks.length} TUGAS</span>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200/80 text-xs font-semibold">
+          <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+          <span>Mendekati Deadline (≤ 3 Hari) &bull; {urgentTasks.length} Tugas</span>
         </span>
       </div>
 
@@ -48,27 +48,27 @@ export function UrgentTasksSection({
           return (
             <div
               key={task.no}
-              className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#000] transition-all flex flex-col justify-between"
+              className="p-4 sm:p-5 rounded-xl bg-white border border-amber-200/70 shadow-xs flex flex-col justify-between"
             >
               <div className="space-y-2.5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="inline-block px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold bg-[#EDE9FE] text-purple-950 border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
+                    <span className="inline-block px-2 py-0.5 rounded text-xs font-medium bg-zinc-100 text-zinc-800">
                       {task.matkul}
                     </span>
-                    <span className="text-xs font-mono font-bold text-zinc-500">#{task.no}</span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-mono font-black px-2.5 py-0.5 rounded-lg bg-[#FECDD3] text-rose-950 border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
+                    <span className="text-xs font-mono text-zinc-400">#{task.no}</span>
+                    <span className="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200/60">
                       {formatDeadlineRelative(task.deadline)}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0">
                     <button
                       type="button"
                       onClick={() => onEdit(task)}
                       aria-label={`Edit tugas #${task.no}`}
                       title="Edit tugas"
-                      className="p-1.5 text-black bg-white hover:bg-[#E0F2FE] rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-[2.5px_2.5px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+                      className="p-1.5 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
@@ -77,27 +77,27 @@ export function UrgentTasksSection({
                       onClick={() => onDelete(task)}
                       aria-label={`Hapus tugas #${task.no}`}
                       title="Hapus tugas"
-                      className="p-1.5 text-black bg-white hover:bg-[#FEE2E2] rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-[2.5px_2.5px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+                      className="p-1.5 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
 
-                <h4 className="text-base sm:text-lg font-black text-black tracking-tight leading-snug">
+                <h4 className="text-base font-semibold text-zinc-900 leading-snug">
                   {task.tugas}
                 </h4>
 
                 {task.keterangan && (
-                  <p className="text-xs font-mono text-zinc-700 bg-[#FDFBF7] border border-black/20 rounded-xl p-2.5">
+                  <p className="text-xs text-zinc-600 bg-zinc-50 border border-zinc-200/60 rounded-lg p-2.5">
                     {task.keterangan}
                   </p>
                 )}
               </div>
 
-              <div className="mt-4 pt-3 border-t-2 border-black/10 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-black">
-                  <Calendar className="w-4 h-4 text-black" />
+              <div className="mt-4 pt-3 border-t border-zinc-100 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-500 font-medium">
+                  <Calendar className="w-3.5 h-3.5 text-zinc-400" />
                   <span>{formatDeadlineDisplay(task.deadline)}</span>
                 </div>
 
@@ -105,9 +105,9 @@ export function UrgentTasksSection({
                   type="button"
                   onClick={() => onToggleStatus(task.no)}
                   disabled={togglingNo === task.no}
-                  className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-mono font-bold rounded-xl border-2 border-black bg-[#86EFAC] hover:bg-[#4ADE80] text-black shadow-[2px_2px_0px_#000] hover:shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[36px]"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 transition-colors cursor-pointer min-h-[34px] disabled:opacity-50"
                 >
-                  <span className="w-4 h-4 rounded-xs border-2 border-black flex items-center justify-center bg-white" />
+                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Tandai Selesai</span>
                 </button>
               </div>

@@ -65,7 +65,7 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!matkul.trim()) {
-      setErrorMessage('Mata kuliah wajib diisi.');
+      setErrorMessage('Pilih mata kuliah terlebih dahulu.');
       return;
     }
     if (!tugas.trim()) {
@@ -101,15 +101,15 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-xs transition-opacity"
       onClick={(e) => {
         if (e.target === e.currentTarget && !loading) onClose();
       }}
     >
-      <div className="w-full max-w-lg rounded-2xl bg-white border-2 border-black shadow-[8px_8px_0px_#000] overflow-hidden">
+      <div className="w-full max-w-lg rounded-2xl bg-white border border-zinc-200 shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b-2 border-black bg-zinc-50">
-          <h2 id="modal-title" className="text-base sm:text-lg font-black text-black font-mono">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 bg-zinc-50/50">
+          <h2 id="modal-title" className="text-base font-semibold text-zinc-900">
             {initialTask ? 'Edit Tugas' : 'Tambah Tugas Baru'}
           </h2>
           <button
@@ -117,31 +117,32 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
             onClick={onClose}
             disabled={loading}
             aria-label="Tutup dialog"
-            className="p-1.5 text-black hover:bg-zinc-200 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+            className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
           >
-            <X className="w-4 h-4 stroke-[3]" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {errorMessage && (
-            <div className="p-3 text-xs sm:text-sm text-black bg-zinc-100 rounded-xl border-2 border-black font-mono font-bold shadow-[2px_2px_0px_#000]">
-              ⚠️ {errorMessage}
+            <div className="p-3 text-xs text-rose-700 bg-rose-50 rounded-lg border border-rose-200/80 font-medium">
+              {errorMessage}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
-              Mata Kuliah <span className="text-black">*</span>
+            <label htmlFor="select-matkul" className="block text-xs font-medium text-zinc-700 mb-1.5">
+              Mata Kuliah <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
               <select
+                id="select-matkul"
                 ref={firstInputRef}
                 required
                 value={matkul}
                 onChange={(e) => setMatkul(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border-2 border-black bg-white text-black font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all cursor-pointer font-bold appearance-none pr-10"
+                className="w-full px-3.5 py-2 rounded-lg border border-zinc-300 bg-white text-zinc-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 appearance-none pr-9 transition-colors shadow-xs cursor-pointer"
               >
                 <option value="" disabled>-- Pilih Mata Kuliah --</option>
                 {MATA_KULIAH_LIST.map((mk) => (
@@ -153,15 +154,15 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
                   <option value={initialTask.matkul}>{initialTask.matkul}</option>
                 )}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-black">
-                <ChevronDown className="w-4 h-4 stroke-[3]" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-zinc-400">
+                <ChevronDown className="w-4 h-4 stroke-[2]" />
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
-              Nama Tugas <span className="text-black">*</span>
+            <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+              Nama Tugas <span className="text-rose-500">*</span>
             </label>
             <input
               type="text"
@@ -169,25 +170,25 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
               value={tugas}
               onChange={(e) => setTugas(e.target.value)}
               placeholder="Contoh: Implementasi API & Frontend Next.js"
-              className="w-full px-3.5 py-2.5 rounded-xl border-2 border-black bg-white text-black placeholder-zinc-400 font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all"
+              className="w-full px-3.5 py-2 rounded-lg border border-zinc-300 bg-white text-zinc-900 placeholder-zinc-400 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-colors shadow-xs"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
-              Deadline <span className="text-black">*</span>
+            <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+              Deadline <span className="text-rose-500">*</span>
             </label>
             <input
               type="date"
               required
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border-2 border-black bg-white text-black font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all cursor-pointer font-bold"
+              className="w-full px-3.5 py-2 rounded-lg border border-zinc-300 bg-white text-zinc-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-colors shadow-xs cursor-pointer"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
+            <label className="block text-xs font-medium text-zinc-700 mb-1.5">
               Keterangan Tambahan (opsional)
             </label>
             <textarea
@@ -195,60 +196,56 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
               value={keterangan}
               onChange={(e) => setKeterangan(e.target.value)}
               placeholder="Contoh: Kumpul di Google Classroom, catatan dosen, dll..."
-              className="w-full px-3.5 py-2 rounded-xl border-2 border-black bg-white text-black placeholder-zinc-400 font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all resize-none"
+              className="w-full px-3.5 py-2 rounded-lg border border-zinc-300 bg-white text-zinc-900 placeholder-zinc-400 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-colors resize-none shadow-xs"
             />
           </div>
 
-          {/* Status Radio */}
+          {/* Status Selection */}
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-2">
-              Status
+            <label className="block text-xs font-medium text-zinc-700 mb-1.5">
+              Status Tugas
             </label>
-            <div className="grid grid-cols-2 gap-3">
-              <label className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] transition-all ${
-                status === 'Belum Selesai' ? 'bg-[#F6AF23] text-black' : 'bg-white text-black hover:bg-amber-50'
-              }`}>
-                <input
-                  type="radio"
-                  name="status"
-                  value="Belum Selesai"
-                  checked={status === 'Belum Selesai'}
-                  onChange={() => setStatus('Belum Selesai')}
-                  className="sr-only"
-                />
-                <span>Belum Selesai</span>
-              </label>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setStatus('Belum Selesai')}
+                className={`p-2.5 rounded-lg border text-xs font-medium flex items-center justify-center transition-colors cursor-pointer ${
+                  status === 'Belum Selesai'
+                    ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs'
+                    : 'bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50'
+                }`}
+              >
+                Belum Selesai
+              </button>
 
-              <label className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] transition-all ${
-                status === 'Selesai' ? 'bg-[#86EFAC] text-black' : 'bg-white text-black hover:bg-emerald-50'
-              }`}>
-                <input
-                  type="radio"
-                  name="status"
-                  value="Selesai"
-                  checked={status === 'Selesai'}
-                  onChange={() => setStatus('Selesai')}
-                  className="sr-only"
-                />
-                <span>Selesai</span>
-              </label>
+              <button
+                type="button"
+                onClick={() => setStatus('Selesai')}
+                className={`p-2.5 rounded-lg border text-xs font-medium flex items-center justify-center transition-colors cursor-pointer ${
+                  status === 'Selesai'
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                    : 'bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50'
+                }`}
+              >
+                Selesai
+              </button>
             </div>
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t-2 border-black/10">
+          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-zinc-100">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-xs sm:text-sm font-bold font-mono text-black hover:bg-zinc-100 rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+              className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center justify-center px-5 py-2 text-xs sm:text-sm font-bold font-mono text-black bg-[#F6AF23] hover:bg-[#E59E15] disabled:opacity-50 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px] min-w-[100px]"
+              className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-zinc-900 hover:bg-zinc-800 disabled:opacity-50 rounded-lg shadow-xs transition-colors cursor-pointer min-h-[38px] min-w-[100px]"
             >
               {loading ? 'Menyimpan...' : 'Simpan Tugas'}
             </button>

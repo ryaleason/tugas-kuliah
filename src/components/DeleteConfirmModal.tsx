@@ -45,53 +45,51 @@ export function DeleteConfirmModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="delete-dialog-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-xs transition-opacity"
       onClick={(e) => {
         if (e.target === e.currentTarget && !loading) onClose();
       }}
     >
-      <div className="w-full max-w-md rounded-2xl bg-white border-2 border-black shadow-[8px_8px_0px_#000] overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b-2 border-black bg-[#FFF1F2]">
-          <div className="flex items-center gap-2.5 text-black font-black font-mono">
-            <span className="p-1.5 bg-[#FDA4AF] border-2 border-black rounded-lg shadow-[2px_2px_0px_#000]">
-              <Trash2 className="w-4 h-4 text-black" />
-            </span>
-            <h2 id="delete-dialog-title" className="text-base font-bold">Hapus Tugas</h2>
+      <div className="w-full max-w-md rounded-2xl bg-white border border-zinc-200 shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 bg-zinc-50/50">
+          <div className="flex items-center gap-2 text-zinc-900 font-semibold text-base">
+            <Trash2 className="w-4 h-4 text-rose-600" />
+            <h2 id="delete-dialog-title">Hapus Tugas</h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             disabled={loading}
             aria-label="Tutup dialog"
-            className="p-1.5 text-black bg-white hover:bg-zinc-100 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+            className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
           >
-            <X className="w-4 h-4 stroke-[3]" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         <div className="p-6">
-          <p className="text-black text-sm font-mono font-semibold mb-3">
-            Apakah Anda yakin ingin menghapus tugas ini?
+          <p className="text-zinc-600 text-sm mb-3">
+            Apakah Anda yakin ingin menghapus tugas ini? Tindakan ini tidak dapat dibatalkan.
           </p>
 
-          <div className="p-4 rounded-xl bg-[#FAF8F5] border-2 border-black shadow-[3px_3px_0px_#000] space-y-1.5 mb-6">
-            <div className="text-xs font-mono font-bold text-zinc-600 uppercase tracking-wider">
+          <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80 space-y-1 mb-6">
+            <div className="text-xs text-zinc-500 font-medium">
               #{task.no} &bull; {task.matkul}
             </div>
-            <div className="text-base font-black text-black tracking-tight">
+            <div className="text-sm font-semibold text-zinc-900">
               {task.tugas}
             </div>
-            <div className="text-xs font-mono font-bold text-black">
+            <div className="text-xs text-zinc-600">
               Deadline: {task.deadline}
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t-2 border-black/10">
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-zinc-100">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-xs sm:text-sm font-bold font-mono text-black bg-white hover:bg-zinc-100 rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+              className="px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
             >
               Batal
             </button>
@@ -100,7 +98,7 @@ export function DeleteConfirmModal({
               type="button"
               disabled={loading}
               onClick={onConfirm}
-              className="inline-flex items-center justify-center px-5 py-2 text-xs sm:text-sm font-black font-mono text-black bg-[#FDA4AF] hover:bg-[#FB7185] disabled:opacity-50 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px]"
+              className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 disabled:opacity-50 rounded-lg shadow-xs transition-colors cursor-pointer min-h-[38px]"
             >
               {loading ? 'Menghapus...' : 'Ya, Hapus'}
             </button>
