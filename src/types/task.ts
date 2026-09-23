@@ -1,3 +1,15 @@
+export const MATA_KULIAH_LIST = [
+  'Arsitektur dan Organisasi Komputer',
+  'Pengantar Teknologi Informasi dan Ilmu Komputer',
+  'Matematika Diskrit',
+  'Bahasa Indonesia',
+  'Bahasa Inggris',
+  'Pemrograman Dasar',
+  'Sistem Digital',
+] as const;
+
+export type MataKuliah = (typeof MATA_KULIAH_LIST)[number];
+
 export type TaskStatus = 'Belum Selesai' | 'Selesai';
 
 export interface Task {

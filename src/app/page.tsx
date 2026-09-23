@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Task, CreateTaskInput, TaskStatus } from '@/types/task';
+import { Task, CreateTaskInput, TaskStatus, MATA_KULIAH_LIST } from '@/types/task';
 import { Navbar } from '@/components/Navbar';
 import { TaskFilterBar } from '@/components/TaskFilterBar';
 import { UrgentTasksSection } from '@/components/UrgentTasksSection';
@@ -69,7 +69,8 @@ export default function DashboardPage() {
   // Unique list of matkuls for dropdown
   const uniqueMatkuls = useMemo(() => {
     const list = tasks.map((t) => t.matkul.trim()).filter(Boolean);
-    return Array.from(new Set(list)).sort((a, b) => a.localeCompare(b));
+    const combined = Array.from(new Set([...MATA_KULIAH_LIST, ...list]));
+    return combined;
   }, [tasks]);
 
   // Filtered & sorted tasks
@@ -234,7 +235,7 @@ export default function DashboardPage() {
               Daftar Tugas Kuliah
             </h2>
             <p className="text-xs sm:text-sm font-mono text-zinc-600 mt-1">
-              Pantau deadline dan kelola tugas kuliah Anda secara terpusat.
+              Pantau deadline dan kelola tugas kuliah secara terpusat.
             </p>
           </div>
 
@@ -308,10 +309,7 @@ export default function DashboardPage() {
       <footer className="mt-auto border-t-2 border-black bg-white py-6 text-center text-xs font-mono font-bold text-black">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
-            tugas-kuliah.co &bull; Terhubung ke Google Sheets &amp; Telegram Bot
-          </div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border-2 border-black bg-[#FDA4AF] shadow-[2px_2px_0px_#000] text-[11px] text-black font-black">
-            <span>⚡ Saweria Palette Edition</span>
+            tugas-kuliah.co
           </div>
         </div>
       </footer>

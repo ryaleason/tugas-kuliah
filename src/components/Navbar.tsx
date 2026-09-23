@@ -14,24 +14,13 @@ export function Navbar({ onAddNew, isConfigured }: NavbarProps) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Brand: Saweria Style */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#F6AF23] text-black flex items-center justify-center border-2 border-black shadow-[2.5px_2.5px_0px_#000] shrink-0 font-black">
-            <CheckSquare2 className="w-5 h-5 text-black stroke-[2.5]" />
-          </div>
+
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-lg sm:text-xl font-black text-black tracking-tight leading-none">
-                tugas-kuliah<span className="text-[#E59E15] font-mono text-sm sm:text-base font-black">.co</span>
+                My Tugas Kuliah
               </h1>
-              {isConfigured && (
-                <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border-2 border-black text-[11px] font-mono font-bold bg-[#BBF7D0] text-black shadow-[1.5px_1.5px_0px_#000]">
-                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-                  <span>Online</span>
-                </span>
-              )}
             </div>
-            <p className="text-[11px] sm:text-xs text-zinc-600 font-mono mt-0.5 hidden sm:block">
-              Jembatan interaksi dengan deadline tugasmu!
-            </p>
           </div>
         </div>
 
@@ -50,4 +39,3 @@ export function Navbar({ onAddNew, isConfigured }: NavbarProps) {
     </header>
   );
 }
-

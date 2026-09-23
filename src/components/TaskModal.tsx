@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Task, CreateTaskInput, TaskStatus } from '@/types/task';
-import { X } from 'lucide-react';
+import { Task, CreateTaskInput, TaskStatus, MATA_KULIAH_LIST } from '@/types/task';
+import { X, ChevronDown } from 'lucide-react';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const firstInputRef = useRef<HTMLInputElement>(null);
+  const firstInputRef = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
     if (initialTask) {
@@ -135,15 +135,28 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
             <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
               Mata Kuliah <span className="text-black">*</span>
             </label>
-            <input
-              ref={firstInputRef}
-              type="text"
-              required
-              value={matkul}
-              onChange={(e) => setMatkul(e.target.value)}
-              placeholder="Contoh: Pemrograman Web, Basis Data Lanjut"
-              className="w-full px-3.5 py-2.5 rounded-xl border-2 border-black bg-white text-black placeholder-zinc-400 font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all"
-            />
+            <div className="relative">
+              <select
+                ref={firstInputRef}
+                required
+                value={matkul}
+                onChange={(e) => setMatkul(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-xl border-2 border-black bg-white text-black font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all cursor-pointer font-bold appearance-none pr-10"
+              >
+                <option value="" disabled>-- Pilih Mata Kuliah --</option>
+                {MATA_KULIAH_LIST.map((mk) => (
+                  <option key={mk} value={mk}>
+                    {mk}
+                  </option>
+                ))}
+                {initialTask && initialTask.matkul && !(MATA_KULIAH_LIST as readonly string[]).includes(initialTask.matkul) && (
+                  <option value={initialTask.matkul}>{initialTask.matkul}</option>
+                )}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-black">
+                <ChevronDown className="w-4 h-4 stroke-[3]" />
+              </div>
+            </div>
           </div>
 
           <div>
