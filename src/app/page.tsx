@@ -180,78 +180,7 @@ export default function DashboardPage() {
           />
         )}
 
-        {/* Section: Upcoming Tasks Preview & Quick Links */}
-        <section aria-labelledby="upcoming-heading" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="sketch-border-sm px-3 py-0.5 text-xs font-bold uppercase tracking-wider text-black bg-white">
-              Tugas Aktif Segera Dikumpulkan
-            </span>
-
-            <Link
-              href="/tugas"
-              className="sketch-btn inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold bg-white text-black hover:bg-zinc-100 cursor-pointer"
-            >
-              <span>Lihat Semua ({totalCount})</span>
-              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
-            </Link>
-          </div>
-
-          {upcomingTasks.length === 0 ? (
-            <div className="sketch-border bg-white border-dashed p-8 text-center space-y-3">
-              <div className="text-lg font-bold text-black">
-                🎉 Hore! Tidak ada tugas yang tertunda.
-              </div>
-              <p className="text-xs sm:text-sm text-zinc-600 max-w-sm mx-auto">
-                Semua tugas kuliah Anda sudah selesai atau belum ada tugas yang ditambahkan.
-              </p>
-              <div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingTask(null);
-                    setIsModalOpen(true);
-                  }}
-                  className="sketch-btn inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-white bg-black hover:bg-zinc-800 cursor-pointer"
-                >
-                  <PlusCircle className="w-4 h-4 stroke-[2.5]" />
-                  <span>Tambah Tugas Baru</span>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              {upcomingTasks.map((t) => (
-                <div
-                  key={t.no}
-                  className="sketch-card p-4 flex flex-col justify-between"
-                >
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="sketch-border-sm px-2 py-0.5 text-xs font-bold bg-white text-black">
-                        {t.matkul}
-                      </span>
-                      <span className="text-xs font-mono font-bold text-zinc-500">#{t.no}</span>
-                    </div>
-                    <h4 className="text-base font-bold text-black leading-snug">
-                      {t.tugas}
-                    </h4>
-                    {t.keterangan && (
-                      <p className="text-xs text-zinc-600 line-clamp-1">{t.keterangan}</p>
-                    )}
-                  </div>
-
-                  <div className="mt-3 pt-2.5 border-t-2 border-dashed border-black/15 flex items-center justify-between text-xs font-bold text-black">
-                    <span>{formatDeadlineDisplay(t.deadline)}</span>
-                    <span className="sketch-border-sm px-1.5 py-0.2 bg-white">
-                      {formatDeadlineRelative(t.deadline)}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-
+      
         {/* Quick Action Banner */}
         <section className="sketch-card p-5 sm:p-6 bg-zinc-50 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
