@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Task, TaskStatus } from '@/types/task';
-import { Search, X, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
+import { Search, X, Clock, AlertCircle } from 'lucide-react';
 import { getDaysUntilDeadline } from '@/lib/date-utils';
 
 interface TaskFilterBarProps {
@@ -36,61 +36,59 @@ export function TaskFilterBar({
 
   return (
     <div className="space-y-4">
-      {/* Overview Stat Cards: Clean, Calm & Structured */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-        <div className="flex items-center justify-between p-4 sm:p-5 rounded-xl bg-white border border-zinc-200/80 shadow-xs">
+      {/* Overview Stat Cards: Hand-drawn Sketch Style (B&W) */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <div className="sketch-card p-4 sm:p-5 flex items-center justify-between">
           <div>
-            <span className="text-xs font-medium text-zinc-500">Total Tugas</span>
-            <div className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1">{totalCount}</div>
+            <div className="text-xs font-bold uppercase tracking-wider text-zinc-600">Total Tugas</div>
+            <div className="text-3xl font-black text-black mt-0.5">{totalCount}</div>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-zinc-100 text-zinc-600 flex items-center justify-center">
-            <Clock className="w-5 h-5 stroke-[2]" />
+          <div className="w-10 h-10 sketch-border-sm flex items-center justify-center bg-white text-black">
+            <Clock className="w-5 h-5 stroke-[2.5]" />
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-4 sm:p-5 rounded-xl bg-white border border-zinc-200/80 shadow-xs">
+        <div className="sketch-card p-4 sm:p-5 flex items-center justify-between">
           <div>
-            <span className="text-xs font-medium text-zinc-500">Belum Selesai</span>
-            <div className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1">{pendingCount}</div>
+            <div className="text-xs font-bold uppercase tracking-wider text-zinc-600">Belum Selesai</div>
+            <div className="text-3xl font-black text-black mt-0.5">{pendingCount}</div>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
-            <AlertTriangle className="w-5 h-5 stroke-[2]" />
+          <div className="w-10 h-10 sketch-border-sm flex items-center justify-center bg-white text-black">
+            <AlertCircle className="w-5 h-5 stroke-[2.5]" />
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-4 sm:p-5 rounded-xl bg-white border border-zinc-200/80 shadow-xs">
+        <div className="sketch-card p-4 sm:p-5 flex items-center justify-between">
           <div>
-            <span className="text-xs font-medium text-zinc-500">Deadline ≤ 3 Hari</span>
-            <div className={`text-2xl sm:text-3xl font-bold mt-1 ${urgentCount > 0 ? 'text-rose-600' : 'text-zinc-900'}`}>
-              {urgentCount}
-            </div>
+            <div className="text-xs font-bold uppercase tracking-wider text-zinc-600">Deadline ≤ 3 Hari</div>
+            <div className="text-3xl font-black text-black mt-0.5">{urgentCount}</div>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
-            <AlertTriangle className="w-5 h-5 stroke-[2]" />
+          <div className="w-10 h-10 sketch-border-sm flex items-center justify-center bg-white text-black">
+            <AlertCircle className="w-5 h-5 stroke-[2.5]" />
           </div>
         </div>
       </div>
 
-      {/* Filter and Search Controls: Clean & Spacious */}
+      {/* Filter and Search Controls */}
       <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black pointer-events-none stroke-[2.5]" />
           <input
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Cari tugas atau mata kuliah..."
-            className="w-full pl-9 pr-8 py-2 rounded-lg border border-zinc-200 bg-white text-zinc-900 placeholder-zinc-400 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-colors shadow-xs"
+            className="sketch-input w-full pl-10 pr-9 py-2 text-sm font-medium text-black placeholder-zinc-400"
           />
           {search && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
               aria-label="Hapus pencarian"
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-zinc-400 hover:text-zinc-700 rounded transition-colors"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-black hover:bg-zinc-100 rounded"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-4 h-4 stroke-[3]" />
             </button>
           )}
         </div>
@@ -101,7 +99,7 @@ export function TaskFilterBar({
             value={matkulFilter}
             onChange={(e) => onMatkulFilterChange(e.target.value)}
             aria-label="Filter berdasarkan mata kuliah"
-            className="w-full px-3 py-2 rounded-lg border border-zinc-200 bg-white text-zinc-800 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-colors cursor-pointer shadow-xs"
+            className="sketch-input w-full px-3.5 py-2 text-sm font-bold text-black cursor-pointer"
           >
             <option value="ALL">Semua Mata Kuliah</option>
             {uniqueMatkuls.map((m) => (
@@ -112,15 +110,15 @@ export function TaskFilterBar({
           </select>
         </div>
 
-        {/* Status Segmented Tabs */}
-        <div className="inline-flex p-1 rounded-lg bg-zinc-100 border border-zinc-200/80">
+        {/* Status Segmented Buttons */}
+        <div className="inline-flex p-1 sketch-border bg-white">
           <button
             type="button"
             onClick={() => onStatusFilterChange('ALL')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+            className={`px-3 py-1 text-xs font-bold rounded transition-colors cursor-pointer ${
               statusFilter === 'ALL'
-                ? 'bg-white text-zinc-900 shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
+                ? 'bg-black text-white'
+                : 'text-black hover:bg-zinc-100'
             }`}
           >
             Semua
@@ -128,10 +126,10 @@ export function TaskFilterBar({
           <button
             type="button"
             onClick={() => onStatusFilterChange('Belum Selesai')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+            className={`px-3 py-1 text-xs font-bold rounded transition-colors cursor-pointer ${
               statusFilter === 'Belum Selesai'
-                ? 'bg-white text-zinc-900 shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
+                ? 'bg-black text-white'
+                : 'text-black hover:bg-zinc-100'
             }`}
           >
             Belum Selesai
@@ -139,10 +137,10 @@ export function TaskFilterBar({
           <button
             type="button"
             onClick={() => onStatusFilterChange('Selesai')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+            className={`px-3 py-1 text-xs font-bold rounded transition-colors cursor-pointer ${
               statusFilter === 'Selesai'
-                ? 'bg-white text-zinc-900 shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
+                ? 'bg-black text-white'
+                : 'text-black hover:bg-zinc-100'
             }`}
           >
             Selesai

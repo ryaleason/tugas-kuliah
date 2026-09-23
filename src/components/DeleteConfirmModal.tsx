@@ -45,15 +45,15 @@ export function DeleteConfirmModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="delete-dialog-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-xs transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity"
       onClick={(e) => {
         if (e.target === e.currentTarget && !loading) onClose();
       }}
     >
-      <div className="w-full max-w-md rounded-2xl bg-white border border-zinc-200 shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 bg-zinc-50/50">
-          <div className="flex items-center gap-2 text-zinc-900 font-semibold text-base">
-            <Trash2 className="w-4 h-4 text-rose-600" />
+      <div className="sketch-card w-full max-w-md bg-white overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b-2 border-black bg-zinc-50">
+          <div className="flex items-center gap-2 text-black font-bold text-lg">
+            <Trash2 className="w-5 h-5 stroke-[2.5]" />
             <h2 id="delete-dialog-title">Hapus Tugas</h2>
           </div>
           <button
@@ -61,35 +61,35 @@ export function DeleteConfirmModal({
             onClick={onClose}
             disabled={loading}
             aria-label="Tutup dialog"
-            className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
+            className="sketch-btn p-1 bg-white text-black hover:bg-zinc-100 cursor-pointer"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 stroke-[3]" />
           </button>
         </div>
 
         <div className="p-6">
-          <p className="text-zinc-600 text-sm mb-3">
+          <p className="text-black text-sm mb-3 font-medium">
             Apakah Anda yakin ingin menghapus tugas ini? Tindakan ini tidak dapat dibatalkan.
           </p>
 
-          <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80 space-y-1 mb-6">
-            <div className="text-xs text-zinc-500 font-medium">
+          <div className="p-3.5 sketch-border-sm bg-zinc-50 space-y-1 mb-6">
+            <div className="text-xs text-zinc-600 font-bold uppercase tracking-wider">
               #{task.no} &bull; {task.matkul}
             </div>
-            <div className="text-sm font-semibold text-zinc-900">
+            <div className="text-base font-bold text-black">
               {task.tugas}
             </div>
-            <div className="text-xs text-zinc-600">
+            <div className="text-xs text-black font-bold">
               Deadline: {task.deadline}
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-zinc-100">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t-2 border-black/15">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
+              className="sketch-btn px-4 py-2 text-sm font-bold text-black bg-white hover:bg-zinc-100 cursor-pointer"
             >
               Batal
             </button>
@@ -98,7 +98,7 @@ export function DeleteConfirmModal({
               type="button"
               disabled={loading}
               onClick={onConfirm}
-              className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 disabled:opacity-50 rounded-lg shadow-xs transition-colors cursor-pointer min-h-[38px]"
+              className="sketch-btn inline-flex items-center justify-center px-4 py-2 text-sm font-bold text-white bg-black hover:bg-zinc-800 disabled:opacity-50 cursor-pointer min-h-[38px]"
             >
               {loading ? 'Menghapus...' : 'Ya, Hapus'}
             </button>

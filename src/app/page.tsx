@@ -186,7 +186,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-zinc-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#fafafa] text-black flex flex-col font-hand">
       <Navbar
         onAddNew={() => {
           setEditingTask(null);
@@ -198,25 +198,25 @@ export default function DashboardPage() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         {/* Setup Notification Banner when in Demo Mode */}
         {!isConfigured && (
-          <div className="p-4 sm:p-5 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-3 text-amber-900">
-            <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="sketch-card p-4 sm:p-5 flex items-start gap-3 text-black">
+            <Info className="w-5 h-5 text-black shrink-0 mt-0.5 stroke-[2.5]" />
             <div className="text-xs sm:text-sm space-y-1">
               <div>
-                <span className="font-semibold mr-1.5">Mode Demo:</span>
+                <span className="font-bold mr-1.5">Mode Demo:</span>
                 Google Sheets belum terhubung. Data saat ini disimpan sementara di memori server.
               </div>
               {missingEnvs.length > 0 ? (
-                <div className="text-xs text-amber-800">
+                <div className="text-xs text-zinc-700">
                   Variabel environment berikut belum terbaca:{' '}
-                  <span className="font-mono bg-amber-100/80 px-1 py-0.5 rounded text-amber-950 font-medium">
+                  <span className="font-mono font-bold sketch-border-sm bg-zinc-100 px-1.5 py-0.5 text-black">
                     {missingEnvs.join(', ')}
                   </span>
                   . Pastikan sudah ditambahkan di Project Settings &gt; Environment Variables.
                 </div>
               ) : (
-                <div className="text-xs text-amber-800">
+                <div className="text-xs text-zinc-700">
                   Variabel terdeteksi namun belum terhubung.{' '}
-                  <a href="/api/debug-env" target="_blank" rel="noreferrer" className="underline font-medium hover:text-amber-950">
+                  <a href="/api/debug-env" target="_blank" rel="noreferrer" className="underline font-bold hover:text-black">
                     Buka /api/debug-env
                   </a>
                 </div>
@@ -228,10 +228,10 @@ export default function DashboardPage() {
         {/* Header Title & Refresh Button */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-black">
               Daftar Tugas Kuliah
             </h2>
-            <p className="text-sm text-zinc-500 mt-1">
+            <p className="text-sm text-zinc-600 mt-0.5">
               Pantau deadline dan kelola tugas kuliah secara terpusat.
             </p>
           </div>
@@ -242,9 +242,9 @@ export default function DashboardPage() {
               onClick={() => fetchTasks(true)}
               disabled={refreshing || loading}
               aria-label="Segarkan data tugas"
-              className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-zinc-700 bg-white hover:bg-zinc-50 border border-zinc-200/80 rounded-lg shadow-xs transition-colors cursor-pointer min-h-[38px] disabled:opacity-50"
+              className="sketch-btn inline-flex items-center gap-2 px-3.5 py-1.5 text-sm font-bold text-black bg-white hover:bg-zinc-100 cursor-pointer min-h-[36px] disabled:opacity-50"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 stroke-[2.5] ${refreshing ? 'animate-spin' : ''}`} />
               <span>{refreshing ? 'Memperbarui...' : 'Segarkan Data'}</span>
             </button>
           </div>
@@ -303,7 +303,7 @@ export default function DashboardPage() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-zinc-200/80 bg-white py-6 text-center text-xs text-zinc-500">
+      <footer className="mt-auto border-t-2 border-black bg-white py-6 text-center text-xs font-bold text-black">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
             tugas-kuliah.co

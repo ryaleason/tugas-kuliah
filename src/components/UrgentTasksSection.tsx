@@ -37,9 +37,9 @@ export function UrgentTasksSection({
   return (
     <section aria-labelledby="urgent-heading" className="space-y-3">
       <div className="flex items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200/80 text-xs font-semibold">
-          <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
-          <span>Mendekati Deadline (≤ 3 Hari) &bull; {urgentTasks.length} Tugas</span>
+        <span className="sketch-border bg-white px-3 py-1 inline-flex items-center gap-2 text-xs font-bold text-black uppercase tracking-wider">
+          <AlertCircle className="w-4 h-4 text-black stroke-[2.5]" />
+          <span>Deadline Dekat (≤ 3 Hari) &bull; {urgentTasks.length} Tugas</span>
         </span>
       </div>
 
@@ -48,56 +48,56 @@ export function UrgentTasksSection({
           return (
             <div
               key={task.no}
-              className="p-4 sm:p-5 rounded-xl bg-white border border-amber-200/70 shadow-xs flex flex-col justify-between"
+              className="sketch-card p-4 sm:p-5 flex flex-col justify-between"
             >
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="inline-block px-2 py-0.5 rounded text-xs font-medium bg-zinc-100 text-zinc-800">
+                    <span className="sketch-border-sm px-2 py-0.5 text-xs font-bold bg-white text-black">
                       {task.matkul}
                     </span>
-                    <span className="text-xs font-mono text-zinc-400">#{task.no}</span>
-                    <span className="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200/60">
+                    <span className="text-xs font-mono font-bold text-zinc-500">#{task.no}</span>
+                    <span className="sketch-border-sm px-2 py-0.5 text-xs font-bold border-dashed bg-zinc-50 text-black">
                       {formatDeadlineRelative(task.deadline)}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       type="button"
                       onClick={() => onEdit(task)}
                       aria-label={`Edit tugas #${task.no}`}
                       title="Edit tugas"
-                      className="p-1.5 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
+                      className="sketch-btn p-1.5 bg-white text-black hover:bg-zinc-100 cursor-pointer"
                     >
-                      <Edit2 className="w-3.5 h-3.5" />
+                      <Edit2 className="w-3.5 h-3.5 stroke-[2.5]" />
                     </button>
                     <button
                       type="button"
                       onClick={() => onDelete(task)}
                       aria-label={`Hapus tugas #${task.no}`}
                       title="Hapus tugas"
-                      className="p-1.5 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+                      className="sketch-btn p-1.5 bg-white text-black hover:bg-zinc-100 cursor-pointer"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3.5 h-3.5 stroke-[2.5]" />
                     </button>
                   </div>
                 </div>
 
-                <h4 className="text-base font-semibold text-zinc-900 leading-snug">
+                <h4 className="text-lg font-bold text-black leading-snug">
                   {task.tugas}
                 </h4>
 
                 {task.keterangan && (
-                  <p className="text-xs text-zinc-600 bg-zinc-50 border border-zinc-200/60 rounded-lg p-2.5">
+                  <p className="text-xs text-zinc-700 bg-zinc-50 border-2 border-dashed border-black/30 rounded-lg p-2.5">
                     {task.keterangan}
                   </p>
                 )}
               </div>
 
-              <div className="mt-4 pt-3 border-t border-zinc-100 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5 text-xs text-zinc-500 font-medium">
-                  <Calendar className="w-3.5 h-3.5 text-zinc-400" />
+              <div className="mt-4 pt-3 border-t-2 border-dashed border-black/20 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-black">
+                  <Calendar className="w-4 h-4 stroke-[2.5]" />
                   <span>{formatDeadlineDisplay(task.deadline)}</span>
                 </div>
 
@@ -105,9 +105,9 @@ export function UrgentTasksSection({
                   type="button"
                   onClick={() => onToggleStatus(task.no)}
                   disabled={togglingNo === task.no}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 transition-colors cursor-pointer min-h-[34px] disabled:opacity-50"
+                  className="sketch-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-black hover:bg-zinc-800 cursor-pointer min-h-[34px] disabled:opacity-50"
                 >
-                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <Check className="w-3.5 h-3.5 stroke-[3]" />
                   <span>Tandai Selesai</span>
                 </button>
               </div>
