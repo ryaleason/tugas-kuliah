@@ -185,7 +185,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#fbfbfb] text-black flex flex-col font-sans">
       <Navbar
         onAddNew={() => {
           setEditingTask(null);
@@ -194,27 +194,30 @@ export default function DashboardPage() {
         isConfigured={isConfigured}
       />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
-        {/* Setup Notification Banner when in Demo Mode */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-7">
+        {/* Setup Notification Banner when in Demo Mode (Saweria Info Box style) */}
         {!isConfigured && (
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
-            <Info className="w-5 h-5 text-amber-800 shrink-0 mt-0.5" />
-            <div className="text-sm text-amber-900 space-y-1">
+          <div className="p-5 sm:p-6 rounded-2xl bg-white border-2 border-black shadow-[5px_5px_0px_#000] flex items-start gap-3.5 font-mono">
+            <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0 border-2 border-black shadow-[2px_2px_0px_#000]">
+              <Info className="w-4 h-4 text-white stroke-[2.5]" />
+            </div>
+            <div className="text-xs sm:text-sm text-black space-y-1.5 leading-relaxed">
               <div>
-                <span className="font-bold">Mode Demo (Google Sheets Belum Terhubung):</span> Data saat ini diambil dari memori lokal.
+                <span className="font-black bg-black text-white px-1.5 py-0.5 rounded text-xs mr-1.5">MODE DEMO</span>
+                <span className="font-bold">Google Sheets Belum Terhubung:</span> Data saat ini disimpan sementara di memori server.
               </div>
               {missingEnvs.length > 0 ? (
-                <div className="text-xs text-amber-800">
+                <div className="text-xs text-zinc-700">
                   Variabel environment berikut belum terbaca oleh server Vercel:{' '}
-                  <span className="font-mono font-semibold bg-amber-100 px-1 py-0.5 rounded text-amber-950">
+                  <span className="font-mono font-black border border-black bg-zinc-100 px-1.5 py-0.5 rounded text-black">
                     {missingEnvs.join(', ')}
                   </span>
                   . Pastikan variabel sudah ditambahkan di Project Settings &gt; Environment Variables dan lakukan Redeploy.
                 </div>
               ) : (
-                <div className="text-xs text-amber-800">
+                <div className="text-xs text-zinc-700">
                   Variabel environment terdeteksi, namun kredensial belum valid atau belum tersambung ke Sheet.{' '}
-                  <a href="/api/debug-env" target="_blank" rel="noreferrer" className="underline font-semibold hover:text-amber-950">
+                  <a href="/api/debug-env" target="_blank" rel="noreferrer" className="underline font-bold hover:text-black">
                     Buka /api/debug-env
                   </a>{' '}
                   untuk melihat status diagnostik.
@@ -224,13 +227,13 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Header Title & Refresh */}
+        {/* Header Title & Refresh Button */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900">
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-black flex items-center gap-2">
               Daftar Tugas Kuliah
             </h2>
-            <p className="text-sm text-zinc-500 mt-0.5">
+            <p className="text-xs sm:text-sm font-mono text-zinc-600 mt-1">
               Pantau deadline dan kelola tugas kuliah Anda secara terpusat.
             </p>
           </div>
@@ -241,9 +244,9 @@ export default function DashboardPage() {
               onClick={() => fetchTasks(true)}
               disabled={refreshing || loading}
               aria-label="Segarkan data tugas"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-semibold text-zinc-700 bg-white hover:bg-zinc-50 border border-zinc-200 rounded-lg shadow-2xs transition-colors min-h-[38px]"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-bold font-mono text-black bg-white hover:bg-zinc-100 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px]"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 stroke-[2.5] ${refreshing ? 'animate-spin' : ''}`} />
               <span>{refreshing ? 'Memperbarui...' : 'Segarkan Data'}</span>
             </button>
           </div>
@@ -301,10 +304,15 @@ export default function DashboardPage() {
         />
       </main>
 
-      {/* Footer */}
-      <footer className="mt-auto border-t border-zinc-200 bg-white py-6 text-center text-xs text-zinc-400">
-        <div className="max-w-6xl mx-auto px-4">
-          Task Tracker Kuliah &bull; Terintegrasi dengan Google Sheets & Telegram Bot
+      {/* Footer: Saweria style badge */}
+      <footer className="mt-auto border-t-2 border-black bg-white py-6 text-center text-xs font-mono font-bold text-black">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div>
+            tugas-kuliah.co &bull; Terhubung ke Google Sheets &amp; Telegram Bot
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border-2 border-black bg-zinc-100 shadow-[2px_2px_0px_#000] text-[11px]">
+            <span>⚡ Neo-Brutalist White &amp; Black Edition</span>
+          </div>
         </div>
       </footer>
 

@@ -101,15 +101,15 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-2xs transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs transition-opacity"
       onClick={(e) => {
         if (e.target === e.currentTarget && !loading) onClose();
       }}
     >
-      <div className="w-full max-w-lg rounded-xl bg-white border border-zinc-200 shadow-xl overflow-hidden">
+      <div className="w-full max-w-lg rounded-2xl bg-white border-2 border-black shadow-[8px_8px_0px_#000] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100">
-          <h2 id="modal-title" className="text-base font-bold text-zinc-900">
+        <div className="flex items-center justify-between px-6 py-4 border-b-2 border-black bg-zinc-50">
+          <h2 id="modal-title" className="text-base sm:text-lg font-black text-black font-mono">
             {initialTask ? 'Edit Tugas' : 'Tambah Tugas Baru'}
           </h2>
           <button
@@ -117,23 +117,23 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
             onClick={onClose}
             disabled={loading}
             aria-label="Tutup dialog"
-            className="p-2 -mr-2 text-zinc-400 hover:text-zinc-700 rounded-lg hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-zinc-900 transition-colors"
+            className="p-1.5 text-black hover:bg-zinc-200 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 stroke-[3]" />
           </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {errorMessage && (
-            <div className="p-3 text-sm text-zinc-900 bg-zinc-100 rounded-lg border border-zinc-200 font-medium">
-              {errorMessage}
+            <div className="p-3 text-xs sm:text-sm text-black bg-zinc-100 rounded-xl border-2 border-black font-mono font-bold shadow-[2px_2px_0px_#000]">
+              ⚠️ {errorMessage}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 mb-1.5">
-              Mata Kuliah <span className="text-zinc-900">*</span>
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
+              Mata Kuliah <span className="text-black">*</span>
             </label>
             <input
               ref={firstInputRef}
@@ -142,39 +142,39 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
               value={matkul}
               onChange={(e) => setMatkul(e.target.value)}
               placeholder="Contoh: Pemrograman Web, Basis Data Lanjut"
-              className="w-full px-3.5 py-2.5 rounded-lg border border-zinc-300 bg-white text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 outline-hidden transition-all text-sm font-medium"
+              className="w-full px-3.5 py-2.5 rounded-xl border-2 border-black bg-white text-black placeholder-zinc-400 font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 mb-1.5">
-              Nama Tugas <span className="text-zinc-900">*</span>
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
+              Nama Tugas <span className="text-black">*</span>
             </label>
             <input
               type="text"
               required
               value={tugas}
               onChange={(e) => setTugas(e.target.value)}
-              placeholder="Contoh: ERD Toko Buku, Laporan Praktikum"
-              className="w-full px-3.5 py-2.5 rounded-lg border border-zinc-300 bg-white text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 outline-hidden transition-all text-sm font-medium"
+              placeholder="Contoh: Implementasi API & Frontend Next.js"
+              className="w-full px-3.5 py-2.5 rounded-xl border-2 border-black bg-white text-black placeholder-zinc-400 font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 mb-1.5">
-              Deadline <span className="text-zinc-900">*</span>
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
+              Deadline <span className="text-black">*</span>
             </label>
             <input
               type="date"
               required
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-zinc-300 bg-white text-zinc-900 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 outline-hidden transition-all text-sm font-medium"
+              className="w-full px-3.5 py-2.5 rounded-xl border-2 border-black bg-white text-black font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all cursor-pointer font-bold"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 mb-1.5">
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-1.5">
               Keterangan Tambahan (opsional)
             </label>
             <textarea
@@ -182,36 +182,40 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
               value={keterangan}
               onChange={(e) => setKeterangan(e.target.value)}
               placeholder="Contoh: Kumpul di Google Classroom, catatan dosen, dll..."
-              className="w-full px-3.5 py-2 rounded-lg border border-zinc-300 bg-white text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 outline-hidden transition-all text-sm resize-none font-medium"
+              className="w-full px-3.5 py-2 rounded-xl border-2 border-black bg-white text-black placeholder-zinc-400 font-mono text-sm shadow-[3px_3px_0px_#000] focus:shadow-[4px_4px_0px_#000] outline-none transition-all resize-none"
             />
           </div>
 
           {/* Status Radio */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 mb-2">
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black mb-2">
               Status
             </label>
-            <div className="flex items-center gap-6">
-              <label className="inline-flex items-center gap-2 text-sm text-zinc-800 cursor-pointer font-medium">
+            <div className="grid grid-cols-2 gap-3">
+              <label className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] transition-all ${
+                status === 'Belum Selesai' ? 'bg-black text-white' : 'bg-white text-black hover:bg-zinc-100'
+              }`}>
                 <input
                   type="radio"
                   name="status"
                   value="Belum Selesai"
                   checked={status === 'Belum Selesai'}
                   onChange={() => setStatus('Belum Selesai')}
-                  className="w-4 h-4 text-zinc-900 border-zinc-300 focus:ring-zinc-900"
+                  className="sr-only"
                 />
                 <span>Belum Selesai</span>
               </label>
 
-              <label className="inline-flex items-center gap-2 text-sm text-zinc-800 cursor-pointer font-medium">
+              <label className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] transition-all ${
+                status === 'Selesai' ? 'bg-black text-white' : 'bg-white text-black hover:bg-zinc-100'
+              }`}>
                 <input
                   type="radio"
                   name="status"
                   value="Selesai"
                   checked={status === 'Selesai'}
                   onChange={() => setStatus('Selesai')}
-                  className="w-4 h-4 text-zinc-900 border-zinc-300 focus:ring-zinc-900"
+                  className="sr-only"
                 />
                 <span>Selesai</span>
               </label>
@@ -219,21 +223,21 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-100">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t-2 border-black/10">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-sm font-semibold text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-zinc-900"
+              className="px-4 py-2 text-xs sm:text-sm font-bold font-mono text-black hover:bg-zinc-100 rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-zinc-900 hover:bg-black disabled:opacity-50 rounded-lg shadow-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 min-h-[40px] min-w-[100px]"
+              className="inline-flex items-center justify-center px-5 py-2 text-xs sm:text-sm font-bold font-mono text-white bg-black hover:bg-zinc-800 disabled:opacity-50 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px] min-w-[100px]"
             >
-              {loading ? 'Menyimpan...' : 'Simpan'}
+              {loading ? 'Menyimpan...' : 'Simpan Tugas'}
             </button>
           </div>
         </form>

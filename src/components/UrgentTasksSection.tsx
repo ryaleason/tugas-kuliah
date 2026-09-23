@@ -37,70 +37,67 @@ export function UrgentTasksSection({
   return (
     <section aria-labelledby="urgent-heading" className="space-y-3">
       <div className="flex items-center gap-2">
-        <span className="p-1 rounded-md bg-zinc-100 border border-zinc-300 text-zinc-900">
-          <AlertCircle className="w-3.5 h-3.5" />
+        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-black bg-black text-white font-mono text-xs font-bold shadow-[2px_2px_0px_#000]">
+          <AlertCircle className="w-3.5 h-3.5 text-white" />
+          <span>DEADLINE DEKAT (&le; 3 HARI) &bull; {urgentTasks.length} TUGAS</span>
         </span>
-        <h3
-          id="urgent-heading"
-          className="text-xs font-bold tracking-wider uppercase text-zinc-800"
-        >
-          Deadline Dekat (&le; 3 Hari) &bull; {urgentTasks.length} Tugas
-        </h3>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
         {urgentTasks.map((task) => {
           return (
             <div
               key={task.no}
-              className="p-4 rounded-xl bg-white border border-zinc-300 shadow-2xs hover:shadow-xs transition-shadow"
+              className="p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#000] transition-all flex flex-col justify-between"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1 min-w-0">
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-zinc-100 text-zinc-900 border border-zinc-200">
+                    <span className="inline-block px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold bg-zinc-100 text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
                       {task.matkul}
                     </span>
-                    <span className="text-xs font-mono text-zinc-500">#{task.no}</span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-zinc-900 text-white">
+                    <span className="text-xs font-mono font-bold text-zinc-500">#{task.no}</span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-mono font-black px-2.5 py-0.5 rounded-lg bg-black text-white border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
                       {formatDeadlineRelative(task.deadline)}
                     </span>
                   </div>
 
-                  <h4 className="text-base font-bold text-zinc-900 truncate">
-                    {task.tugas}
-                  </h4>
-
-                  {task.keterangan && (
-                    <p className="text-xs text-zinc-600 line-clamp-1">
-                      {task.keterangan}
-                    </p>
-                  )}
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => onEdit(task)}
+                      aria-label={`Edit tugas #${task.no}`}
+                      title="Edit tugas"
+                      className="p-1.5 text-black hover:bg-zinc-100 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-[2.5px_2.5px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(task)}
+                      aria-label={`Hapus tugas #${task.no}`}
+                      title="Hapus tugas"
+                      className="p-1.5 text-black hover:bg-zinc-100 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-[2.5px_2.5px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-1 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => onEdit(task)}
-                    aria-label={`Edit tugas #${task.no}`}
-                    className="min-w-[38px] min-h-[38px] flex items-center justify-center text-zinc-500 hover:text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors focus-visible:outline-2 focus-visible:outline-zinc-900"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onDelete(task)}
-                    aria-label={`Hapus tugas #${task.no}`}
-                    className="min-w-[38px] min-h-[38px] flex items-center justify-center text-zinc-500 hover:text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors focus-visible:outline-2 focus-visible:outline-zinc-900"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+                <h4 className="text-base sm:text-lg font-black text-black tracking-tight leading-snug">
+                  {task.tugas}
+                </h4>
+
+                {task.keterangan && (
+                  <p className="text-xs font-mono text-zinc-700 bg-zinc-50 border border-black/20 rounded-xl p-2.5">
+                    {task.keterangan}
+                  </p>
+                )}
               </div>
 
-              <div className="mt-3 pt-3 border-t border-zinc-100 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-600">
-                  <Calendar className="w-3.5 h-3.5 text-zinc-400" />
+              <div className="mt-4 pt-3 border-t-2 border-black/10 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-black">
+                  <Calendar className="w-4 h-4 text-black" />
                   <span>{formatDeadlineDisplay(task.deadline)}</span>
                 </div>
 
@@ -108,9 +105,9 @@ export function UrgentTasksSection({
                   type="button"
                   onClick={() => onToggleStatus(task.no)}
                   disabled={togglingNo === task.no}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-zinc-300 bg-white text-zinc-900 hover:bg-zinc-50 hover:border-zinc-400 transition-colors min-h-[36px]"
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-mono font-bold rounded-xl border-2 border-black bg-white hover:bg-zinc-100 text-black shadow-[2px_2px_0px_#000] hover:shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[36px]"
                 >
-                  <span className="w-3.5 h-3.5 rounded-xs border border-zinc-400" />
+                  <span className="w-4 h-4 rounded-xs border-2 border-black flex items-center justify-center bg-white" />
                   <span>Tandai Selesai</span>
                 </button>
               </div>
