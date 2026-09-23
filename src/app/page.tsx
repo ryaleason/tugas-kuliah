@@ -16,6 +16,7 @@ export default function DashboardPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isConfigured, setIsConfigured] = useState(true);
+  const [missingEnvs, setMissingEnvs] = useState<string[]>([]);
 
   // Filters & Search
   const [search, setSearch] = useState('');
@@ -46,6 +47,11 @@ export default function DashboardPage() {
       setTasks(json.data || []);
       if (typeof json.isConfigured === 'boolean') {
         setIsConfigured(json.isConfigured);
+      }
+      if (Array.isArray(json.missingEnvs)) {
+        setMissingEnvs(json.missingEnvs);
+      } else {
+        setMissingEnvs([]);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Terjadi kesalahan jaringan.';
@@ -191,19 +197,29 @@ export default function DashboardPage() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         {/* Setup Notification Banner when in Demo Mode */}
         {!isConfigured && (
-          <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-200 flex items-start gap-3">
-            <Info className="w-5 h-5 text-zinc-800 shrink-0 mt-0.5" />
-            <div className="text-sm text-zinc-700">
-              <span className="font-bold text-zinc-900">Mode Demo Lokal:</span> Google Sheets & Telegram Bot
-              belum dikonfigurasi. Data saat ini disimpan sementara di memori. Salin file{' '}
-              <code className="px-1.5 py-0.5 rounded-md bg-zinc-200 font-mono text-xs">
-                .env.example
-              </code>{' '}
-              ke{' '}
-              <code className="px-1.5 py-0.5 rounded-md bg-zinc-200 font-mono text-xs">
-                .env.local
-              </code>{' '}
-              dan masukkan ID Spreadsheet serta kredensial Anda.
+          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+            <Info className="w-5 h-5 text-amber-800 shrink-0 mt-0.5" />
+            <div className="text-sm text-amber-900 space-y-1">
+              <div>
+                <span className="font-bold">Mode Demo (Google Sheets Belum Terhubung):</span> Data saat ini diambil dari memori lokal.
+              </div>
+              {missingEnvs.length > 0 ? (
+                <div className="text-xs text-amber-800">
+                  Variabel environment berikut belum terbaca oleh server Vercel:{' '}
+                  <span className="font-mono font-semibold bg-amber-100 px-1 py-0.5 rounded text-amber-950">
+                    {missingEnvs.join(', ')}
+                  </span>
+                  . Pastikan variabel sudah ditambahkan di Project Settings &gt; Environment Variables dan lakukan Redeploy.
+                </div>
+              ) : (
+                <div className="text-xs text-amber-800">
+                  Variabel environment terdeteksi, namun kredensial belum valid atau belum tersambung ke Sheet.{' '}
+                  <a href="/api/debug-env" target="_blank" rel="noreferrer" className="underline font-semibold hover:text-amber-950">
+                    Buka /api/debug-env
+                  </a>{' '}
+                  untuk melihat status diagnostik.
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -6,11 +6,19 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
+    const isConfig = isSheetsConfigured();
     const tasks = await getTasks();
+
+    const missingEnvs: string[] = [];
+    if (!process.env.GOOGLE_SHEET_ID) missingEnvs.push('GOOGLE_SHEET_ID');
+    if (!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && !process.env.GOOGLE_SERVICE_ACCOUNT_KEY) missingEnvs.push('GOOGLE_SERVICE_ACCOUNT_EMAIL');
+    if (!process.env.GOOGLE_PRIVATE_KEY && !process.env.GOOGLE_SERVICE_ACCOUNT_KEY) missingEnvs.push('GOOGLE_PRIVATE_KEY');
+
     return NextResponse.json({
       success: true,
       data: tasks,
-      isConfigured: isSheetsConfigured(),
+      isConfigured: isConfig,
+      missingEnvs: !isConfig ? missingEnvs : undefined,
     });
   } catch (error) {
     console.error('API GET /api/tasks error:', error);
