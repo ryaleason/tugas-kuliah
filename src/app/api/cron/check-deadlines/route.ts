@@ -28,27 +28,37 @@ export async function GET(req: NextRequest) {
     }
 
     const tasks = await getTasks();
-    // Filter tasks: 'Belum Selesai' and exactly H-4 (diff === 4)
-    // We also optionally check if there are tasks overdue or today to give full awareness if needed
-    const hMinus4Tasks = tasks.filter((t) => {
-      if (t.status !== 'Belum Selesai') return false;
-      const diff = getDaysUntilDeadline(t.deadline);
-      return diff === 4;
-    });
+    // Filter tasks: 'Belum Selesai' and nearing deadline: H-3, H-2, H-1 (and Hari H / H-0)
+    const urgentTasks = tasks
+      .filter((t) => {
+        if (t.status !== 'Belum Selesai') return false;
+        const diff = getDaysUntilDeadline(t.deadline);
+        // Remind for H-3, H-2, H-1, and Hari H (diff: 0..3)
+        return diff >= 0 && diff <= 3;
+      })
+      .sort((a, b) => getDaysUntilDeadline(a.deadline) - getDaysUntilDeadline(b.deadline));
 
-    if (hMinus4Tasks.length === 0) {
+    if (urgentTasks.length === 0) {
       return NextResponse.json({
         success: true,
-        message: 'No tasks due at H-4 today.',
+        message: 'Tidak ada tugas yang mendekati deadline (H-3, H-2, H-1, Hari H) hari ini.',
         checkedCount: tasks.length,
         notifiedCount: 0,
       });
     }
 
-    let messageText = `<b>⚠️ PENGINGAT DEADLINE H-4!</b>\n\n`;
-    messageText += `Terdapat <b>${hMinus4Tasks.length} tugas</b> yang tersisa <b>4 hari lagi</b>:\n\n`;
+    let messageText = `<b>🔔 PENGINGAT DEADLINE TUGAS KULIAH</b>\n\n`;
+    messageText += `Halo! Ada <b>${urgentTasks.length} tugas</b> yang mendekati batas waktu pengumpulan:\n\n`;
 
-    hMinus4Tasks.forEach((t) => {
+    urgentTasks.forEach((t) => {
+      const diff = getDaysUntilDeadline(t.deadline);
+      let urgencyBadge = '';
+      if (diff === 0) urgencyBadge = '🔥 <b>[DEADLINE HARI INI - H-0]</b>';
+      else if (diff === 1) urgencyBadge = '🚨 <b>[BESOK - H-1]</b>';
+      else if (diff === 2) urgencyBadge = '⚠️ <b>[2 HARI LAGI - H-2]</b>';
+      else if (diff === 3) urgencyBadge = '⏰ <b>[3 HARI LAGI - H-3]</b>';
+
+      messageText += `${urgencyBadge}\n`;
       messageText += `📌 <b>#${t.no} : ${t.matkul}</b>\n`;
       messageText += `📝 ${t.tugas}\n`;
       messageText += `📅 Deadline: <b>${formatDeadlineDisplay(t.deadline)}</b>\n`;
@@ -58,14 +68,26 @@ export async function GET(req: NextRequest) {
       messageText += `──────────────────\n`;
     });
 
-    messageText += `\n<i>Semangat mencicil tugas! Buka web atau kirim <code>/list</code> di bot.</i>`;
+    const overdueCount = tasks.filter(
+      (t) => t.status === 'Belum Selesai' && getDaysUntilDeadline(t.deadline) < 0
+    ).length;
+    if (overdueCount > 0) {
+      messageText += `\n⚠️ <i>Catatan: Ada ${overdueCount} tugas yang sudah lewat batas deadline.</i>\n`;
+    }
+
+    messageText += `\n<i>Semangat mencicil tugas! Kirim <code>/list</code> atau <code>/list-tugas</code> di bot.</i>`;
 
     const sendRes = await sendTelegramMessage(chatId, messageText);
 
     return NextResponse.json({
       success: true,
-      notifiedCount: hMinus4Tasks.length,
-      tasks: hMinus4Tasks.map((t) => ({ no: t.no, matkul: t.matkul, deadline: t.deadline })),
+      notifiedCount: urgentTasks.length,
+      tasks: urgentTasks.map((t) => ({
+        no: t.no,
+        matkul: t.matkul,
+        deadline: t.deadline,
+        daysLeft: getDaysUntilDeadline(t.deadline),
+      })),
       telegramResult: sendRes,
     });
   } catch (error) {

@@ -46,6 +46,30 @@ export async function sendTelegramMessage(
   }
 
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+  // Telegram limit is 4096 characters per message
+  if (text.length > 4000) {
+    const chunks = text.match(/[\s\S]{1,4000}/g) || [text];
+    let lastRes = { ok: true };
+    for (const chunk of chunks) {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: chunk,
+            parse_mode: parseMode,
+          }),
+        });
+        lastRes = await res.json();
+      } catch (err) {
+        console.error('Failed to send Telegram chunk:', err);
+      }
+    }
+    return lastRes;
+  }
+
   try {
     const res = await fetch(url, {
       method: 'POST',
@@ -90,8 +114,9 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
   }
 
   const parts = rawText.split(' ');
-  const command = parts[0].toLowerCase();
-  const argsText = rawText.substring(command.length).trim();
+  const rawCommand = parts[0].toLowerCase();
+  const command = rawCommand.split('@')[0];
+  const argsText = rawText.substring(rawCommand.length).trim();
 
   // Route commands
   if (command === '/start' || command === '/help') {
@@ -101,11 +126,12 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
 Halo! Bot ini terhubung ke Google Sheets tugas kuliah Anda.
 
 <b>Daftar Perintah:</b>
-• <code>/list</code> : Tampilkan semua tugas yang belum selesai
+• <code>/list</code> : Tampilkan tugas yang belum selesai
+• <code>/list-tugas</code> : Tampilkan SEMUA tugas (selesai & belum)
 • <code>/tambah [Matkul] | [Tugas] | [YYYY-MM-DD] | [Keterangan]</code> : Tambah tugas baru
 • <code>/selesai [No]</code> : Tandai tugas sebagai selesai
-• <code>/hapus [No]</code> : Hapus tugas
 • <code>/edit [No] [matkul|tugas|deadline|keterangan] [nilai baru]</code> : Ubah data tugas
+• <code>/hapus [No]</code> : Hapus tugas
 • <code>/help</code> : Tampilkan bantuan ini
 
 <b>Info Akun:</b>
@@ -135,8 +161,10 @@ Telegram Chat ID Anda: <code>${chatId}</code>
         const diff = getDaysUntilDeadline(t.deadline);
         let badge = '🟢';
         if (diff < 0) badge = '🔴 [TERLEWAT]';
-        else if (diff === 0) badge = '🔴 [HARI INI]';
-        else if (diff <= 3) badge = '🟠 [DEADLINE DEKAT]';
+        else if (diff === 0) badge = '🔥 [HARI INI]';
+        else if (diff === 1) badge = '🚨 [BESOK - H-1]';
+        else if (diff === 2) badge = '⚠️ [2 HARI LAGI - H-2]';
+        else if (diff === 3) badge = '⏰ [3 HARI LAGI - H-3]';
         else if (diff <= 7) badge = '🟡';
 
         response += `${badge} <b>#${t.no} : ${escapeHtml(t.matkul)}</b>\n`;
@@ -148,11 +176,69 @@ Telegram Chat ID Anda: <code>${chatId}</code>
         response += `──────────────────\n`;
       });
 
-      response += `\n<i>Gunakan <code>/selesai [No]</code> untuk menyelesaikan tugas.</i>`;
+      response += `\n<i>Gunakan <code>/selesai [No]</code> untuk menyelesaikan tugas, atau <code>/list-tugas</code> untuk melihat semua tugas.</i>`;
       await sendTelegramMessage(chatId, response);
     } catch (err) {
       console.error(err);
       await sendTelegramMessage(chatId, '❌ Gagal mengambil daftar tugas dari Google Sheets.');
+    }
+    return;
+  }
+
+  if (
+    command === '/list-tugas' ||
+    command === '/list_tugas' ||
+    command === '/listtugas' ||
+    command === '/all' ||
+    command === '/semuatugas'
+  ) {
+    try {
+      const tasks = await getTasks();
+
+      if (tasks.length === 0) {
+        await sendTelegramMessage(
+          chatId,
+          '📭 <b>Belum ada data tugas di Google Sheets.</b>'
+        );
+        return;
+      }
+
+      const totalCount = tasks.length;
+      const completedCount = tasks.filter((t) => t.status === 'Selesai').length;
+      const pendingCount = tasks.filter((t) => t.status === 'Belum Selesai').length;
+
+      let response = `<b>📚 Seluruh Data Tugas Kuliah (${totalCount})</b>\n`;
+      response += `📊 Selesai: <b>${completedCount}</b> | Belum Selesai: <b>${pendingCount}</b>\n\n`;
+
+      tasks.forEach((t) => {
+        const isDone = t.status === 'Selesai';
+        let statusBadge = '';
+        if (isDone) {
+          statusBadge = '✅ [SELESAI]';
+        } else {
+          const diff = getDaysUntilDeadline(t.deadline);
+          if (diff < 0) statusBadge = '🔴 [TERLEWAT]';
+          else if (diff === 0) statusBadge = '🔥 [HARI INI]';
+          else if (diff === 1) statusBadge = '🚨 [BESOK - H-1]';
+          else if (diff === 2) statusBadge = '⚠️ [H-2]';
+          else if (diff === 3) statusBadge = '⏰ [H-3]';
+          else statusBadge = '⏳ [BELUM SELESAI]';
+        }
+
+        response += `${statusBadge} <b>#${t.no} : ${escapeHtml(t.matkul)}</b>\n`;
+        response += `📝 ${escapeHtml(t.tugas)}\n`;
+        response += `📅 ${formatDeadlineDisplay(t.deadline)} (${formatDeadlineRelative(t.deadline)})\n`;
+        if (t.keterangan) {
+          response += `💬 <i>${escapeHtml(t.keterangan)}</i>\n`;
+        }
+        response += `──────────────────\n`;
+      });
+
+      response += `\n<i>Gunakan <code>/selesai [No]</code> untuk menyelesaikan tugas, atau <code>/list</code> untuk hanya tugas aktif.</i>`;
+      await sendTelegramMessage(chatId, response);
+    } catch (err) {
+      console.error(err);
+      await sendTelegramMessage(chatId, '❌ Gagal mengambil seluruh data tugas dari Google Sheets.');
     }
     return;
   }
