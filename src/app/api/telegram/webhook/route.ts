@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { handleTelegramUpdate, TelegramUpdate } from '@/lib/telegram';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const secret = process.env.TELEGRAM_BOT_SECRET;
