@@ -25,6 +25,29 @@ let mockTasks: Task[] = [
   },
 ];
 
+function cleanString(val?: string | null): string {
+  if (!val) return '';
+  let cleaned = val.trim();
+  if (
+    (cleaned.startsWith('"') && cleaned.endsWith('"')) ||
+    (cleaned.startsWith("'") && cleaned.endsWith("'"))
+  ) {
+    cleaned = cleaned.slice(1, -1);
+  }
+  return cleaned.trim();
+}
+
+function cleanPrivateKey(key?: string | null): string {
+  if (!key) return '';
+  let cleaned = cleanString(key);
+  cleaned = cleaned.replace(/\\n/g, '\n').replace(/\r/g, '');
+  return cleaned.trim();
+}
+
+export function getSpreadsheetId(): string {
+  return cleanString(process.env.GOOGLE_SHEET_ID);
+}
+
 function getCredentials() {
   const jsonKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
   if (jsonKey) {
@@ -32,8 +55,8 @@ function getCredentials() {
       const parsed = typeof jsonKey === 'string' ? JSON.parse(jsonKey) : jsonKey;
       if (parsed.client_email && parsed.private_key) {
         return {
-          client_email: parsed.client_email,
-          private_key: parsed.private_key.replace(/\\n/g, '\n'),
+          client_email: cleanString(parsed.client_email),
+          private_key: cleanPrivateKey(parsed.private_key),
         };
       }
     } catch {
@@ -41,11 +64,8 @@ function getCredentials() {
     }
   }
 
-  const client_email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  let private_key = process.env.GOOGLE_PRIVATE_KEY;
-  if (private_key) {
-    private_key = private_key.replace(/\\n/g, '\n');
-  }
+  const client_email = cleanString(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL);
+  const private_key = cleanPrivateKey(process.env.GOOGLE_PRIVATE_KEY);
 
   if (client_email && private_key) {
     return { client_email, private_key };
@@ -55,7 +75,7 @@ function getCredentials() {
 }
 
 export function isSheetsConfigured(): boolean {
-  const sheetId = process.env.GOOGLE_SHEET_ID;
+  const sheetId = getSpreadsheetId();
   const creds = getCredentials();
   return Boolean(sheetId && creds && !sheetId.includes('your_google_sheet_id'));
 }
@@ -165,7 +185,7 @@ async function detectSheetLayout(sheets: sheets_v4.Sheets, spreadsheetId: string
 }
 
 export async function getTasks(): Promise<Task[]> {
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+  const spreadsheetId = getSpreadsheetId();
   const sheets = getSheetsClient();
 
   if (!sheets || !spreadsheetId || !isSheetsConfigured()) {
@@ -222,7 +242,7 @@ export async function getTaskByNo(no: number): Promise<Task | null> {
 }
 
 export async function createTask(input: CreateTaskInput): Promise<Task> {
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+  const spreadsheetId = getSpreadsheetId();
   const sheets = getSheetsClient();
 
   if (!sheets || !spreadsheetId || !isSheetsConfigured()) {
@@ -301,7 +321,7 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
 }
 
 export async function updateTask(no: number, input: UpdateTaskInput): Promise<Task | null> {
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+  const spreadsheetId = getSpreadsheetId();
   const sheets = getSheetsClient();
 
   if (!sheets || !spreadsheetId || !isSheetsConfigured()) {
@@ -361,7 +381,7 @@ export async function toggleTaskStatus(no: number): Promise<Task | null> {
 }
 
 export async function deleteTask(no: number): Promise<boolean> {
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+  const spreadsheetId = getSpreadsheetId();
   const sheets = getSheetsClient();
 
   if (!sheets || !spreadsheetId || !isSheetsConfigured()) {

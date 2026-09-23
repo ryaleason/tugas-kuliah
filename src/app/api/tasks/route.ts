@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createTask, getTasks, isSheetsConfigured } from '@/lib/sheets';
 import { CreateTaskInput } from '@/types/task';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const tasks = await getTasks();
@@ -12,8 +14,9 @@ export async function GET() {
     });
   } catch (error) {
     console.error('API GET /api/tasks error:', error);
+    const errorMsg = error instanceof Error ? error.message : 'Gagal mengambil data tugas dari spreadsheet.';
     return NextResponse.json(
-      { success: false, error: 'Gagal mengambil data tugas dari spreadsheet.' },
+      { success: false, error: errorMsg },
       { status: 500 }
     );
   }

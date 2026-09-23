@@ -6,6 +6,8 @@ interface RouteContext {
   params: Promise<{ no: string }>;
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest, context: RouteContext) {
   try {
     const { no: noParam } = await context.params;

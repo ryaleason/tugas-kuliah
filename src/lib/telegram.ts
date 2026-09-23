@@ -22,12 +22,24 @@ export interface TelegramUpdate {
   };
 }
 
+function cleanString(val?: string | null): string {
+  if (!val) return '';
+  let cleaned = val.trim();
+  if (
+    (cleaned.startsWith('"') && cleaned.endsWith('"')) ||
+    (cleaned.startsWith("'") && cleaned.endsWith("'"))
+  ) {
+    cleaned = cleaned.slice(1, -1);
+  }
+  return cleaned.trim();
+}
+
 export async function sendTelegramMessage(
   chatId: number | string,
   text: string,
   parseMode: 'HTML' | 'Markdown' = 'HTML'
 ) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const token = cleanString(process.env.TELEGRAM_BOT_TOKEN);
   if (!token) {
     console.warn('TELEGRAM_BOT_TOKEN is not configured');
     return { ok: false, description: 'Bot token not set' };
@@ -52,12 +64,12 @@ export async function sendTelegramMessage(
 }
 
 export function isUserAuthorized(senderId?: number | string): boolean {
-  const allowed = process.env.TELEGRAM_ALLOWED_USER_ID;
+  const allowed = cleanString(process.env.TELEGRAM_ALLOWED_USER_ID);
   if (!allowed) {
     // If not set yet, allow for initial setup and identification
     return true;
   }
-  return String(senderId) === allowed.trim();
+  return String(senderId) === allowed;
 }
 
 export async function handleTelegramUpdate(update: TelegramUpdate) {
