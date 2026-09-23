@@ -36,35 +36,35 @@ export function TaskFilterBar({
 
   return (
     <div className="space-y-4">
-      {/* Overview Stat Badges: Saweria Neo-Brutalist Cards */}
+      {/* Overview Stat Badges: Saweria Neo-Brutalist Colorful Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        <div className="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000] transition-all">
+        <div className="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-[#F0F9FF] border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000] transition-all">
           <div>
-            <div className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-600">Total Tugas</div>
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-sky-950">Total Tugas</div>
             <div className="text-3xl font-black font-mono text-black mt-1">{totalCount}</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-zinc-100 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000]">
-            <Clock className="w-5 h-5 text-black" />
+          <div className="w-11 h-11 rounded-xl bg-[#85D7E8] border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000]">
+            <Clock className="w-5 h-5 text-black stroke-[2.5]" />
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000] transition-all">
+        <div className="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-[#FFFBEB] border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000] transition-all">
           <div>
-            <div className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-600">Belum Selesai</div>
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-amber-950">Belum Selesai</div>
             <div className="text-3xl font-black font-mono text-black mt-1">{pendingCount}</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-zinc-100 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000]">
-            <AlertCircle className="w-5 h-5 text-black" />
+          <div className="w-11 h-11 rounded-xl bg-[#F6AF23] border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000]">
+            <AlertCircle className="w-5 h-5 text-black stroke-[2.5]" />
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000] transition-all">
+        <div className="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-[#FFF1F2] border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000] transition-all">
           <div>
-            <div className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-600">Deadline &le; 3 Hari</div>
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-rose-950">Deadline &le; 3 Hari</div>
             <div className="text-3xl font-black font-mono text-black mt-1">{urgentCount}</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-black text-white border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000]">
-            <AlertCircle className="w-5 h-5 text-white" />
+          <div className="w-11 h-11 rounded-xl bg-[#FDA4AF] border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000]">
+            <AlertCircle className="w-5 h-5 text-black stroke-[2.5]" />
           </div>
         </div>
       </div>
@@ -111,14 +111,14 @@ export function TaskFilterBar({
         </div>
 
         {/* Status Segmented Tabs */}
-        <div className="inline-flex p-1 rounded-xl bg-zinc-100 border-2 border-black shadow-[3px_3px_0px_#000]">
+        <div className="inline-flex p-1 rounded-xl bg-white border-2 border-black shadow-[3px_3px_0px_#000]">
           <button
             type="button"
             onClick={() => onStatusFilterChange('ALL')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
               statusFilter === 'ALL'
-                ? 'bg-black text-white border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
-                : 'text-black hover:bg-zinc-200'
+                ? 'bg-[#85D7E8] text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
+                : 'text-zinc-700 hover:bg-zinc-100'
             }`}
           >
             Semua
@@ -128,8 +128,8 @@ export function TaskFilterBar({
             onClick={() => onStatusFilterChange('Belum Selesai')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
               statusFilter === 'Belum Selesai'
-                ? 'bg-black text-white border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
-                : 'text-black hover:bg-zinc-200'
+                ? 'bg-[#F6AF23] text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
+                : 'text-zinc-700 hover:bg-zinc-100'
             }`}
           >
             Belum Selesai
@@ -139,8 +139,8 @@ export function TaskFilterBar({
             onClick={() => onStatusFilterChange('Selesai')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
               statusFilter === 'Selesai'
-                ? 'bg-black text-white border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
-                : 'text-black hover:bg-zinc-200'
+                ? 'bg-[#86EFAC] text-black border-2 border-black shadow-[1.5px_1.5px_0px_#000]'
+                : 'text-zinc-700 hover:bg-zinc-100'
             }`}
           >
             Selesai

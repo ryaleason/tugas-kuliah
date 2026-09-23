@@ -192,8 +192,8 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
               Status
             </label>
             <div className="grid grid-cols-2 gap-3">
-              <label className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] transition-all ${
-                status === 'Belum Selesai' ? 'bg-black text-white' : 'bg-white text-black hover:bg-zinc-100'
+              <label className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] transition-all ${
+                status === 'Belum Selesai' ? 'bg-[#F6AF23] text-black' : 'bg-white text-black hover:bg-amber-50'
               }`}>
                 <input
                   type="radio"
@@ -206,8 +206,8 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
                 <span>Belum Selesai</span>
               </label>
 
-              <label className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] transition-all ${
-                status === 'Selesai' ? 'bg-black text-white' : 'bg-white text-black hover:bg-zinc-100'
+              <label className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_#000] transition-all ${
+                status === 'Selesai' ? 'bg-[#86EFAC] text-black' : 'bg-white text-black hover:bg-emerald-50'
               }`}>
                 <input
                   type="radio"
@@ -235,7 +235,7 @@ export function TaskModal({ isOpen, onClose, onSubmit, initialTask }: TaskModalP
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center justify-center px-5 py-2 text-xs sm:text-sm font-bold font-mono text-white bg-black hover:bg-zinc-800 disabled:opacity-50 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px] min-w-[100px]"
+              className="inline-flex items-center justify-center px-5 py-2 text-xs sm:text-sm font-bold font-mono text-black bg-[#F6AF23] hover:bg-[#E59E15] disabled:opacity-50 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px] min-w-[100px]"
             >
               {loading ? 'Menyimpan...' : 'Simpan Tugas'}
             </button>

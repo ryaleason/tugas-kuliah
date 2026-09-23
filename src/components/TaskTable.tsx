@@ -102,7 +102,7 @@ export function TaskTable({
             <button
               type="button"
               onClick={onAddNew}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-bold font-mono text-white bg-black hover:bg-zinc-800 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-bold font-mono text-black bg-[#F6AF23] hover:bg-[#E59E15] rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
             >
               <PlusCircle className="w-4 h-4 stroke-[2.5]" />
               Tambah Tugas
@@ -116,7 +116,7 @@ export function TaskTable({
   return (
     <section aria-labelledby="all-tasks-heading" className="space-y-3">
       <div className="flex items-center justify-between">
-        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-black bg-zinc-100 text-black font-mono text-xs font-bold shadow-[2px_2px_0px_#000]">
+        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border-2 border-black bg-[#BAE6FD] text-sky-950 font-mono text-xs font-black shadow-[2px_2px_0px_#000]">
           <span>SEMUA TUGAS &bull; {tasks.length} TOTAL</span>
         </span>
       </div>
@@ -126,7 +126,7 @@ export function TaskTable({
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b-2 border-black bg-zinc-100 text-xs font-black font-mono text-black uppercase tracking-wider">
+              <tr className="border-b-2 border-black bg-[#FAF8F5] text-xs font-black font-mono text-black uppercase tracking-wider">
                 <th className="py-3 px-4 w-14 text-center" scope="col">
                   No
                 </th>

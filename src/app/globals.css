@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fbfbfb;
-  --foreground: #000000;
+  --background: #FAF8F5;
+  --foreground: #18181B;
 }
 
 @theme inline {
@@ -13,13 +13,13 @@
 }
 
 body {
-  background-color: #fbfbfb;
-  color: #000000;
+  background-color: #FAF8F5;
+  color: #18181B;
   font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
 }
 
 ::selection {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #F6AF23;
+  color: #000000;
 }

@@ -244,7 +244,7 @@ export default function DashboardPage() {
               onClick={() => fetchTasks(true)}
               disabled={refreshing || loading}
               aria-label="Segarkan data tugas"
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-bold font-mono text-black bg-white hover:bg-zinc-100 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px]"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-bold font-mono text-black bg-[#85D7E8] hover:bg-[#68CBE0] border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer min-h-[40px]"
             >
               <RefreshCw className={`w-3.5 h-3.5 stroke-[2.5] ${refreshing ? 'animate-spin' : ''}`} />
               <span>{refreshing ? 'Memperbarui...' : 'Segarkan Data'}</span>
@@ -310,8 +310,8 @@ export default function DashboardPage() {
           <div>
             tugas-kuliah.co &bull; Terhubung ke Google Sheets &amp; Telegram Bot
           </div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border-2 border-black bg-zinc-100 shadow-[2px_2px_0px_#000] text-[11px]">
-            <span>⚡ Neo-Brutalist White &amp; Black Edition</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border-2 border-black bg-[#FDA4AF] shadow-[2px_2px_0px_#000] text-[11px] text-black font-black">
+            <span>⚡ Saweria Palette Edition</span>
           </div>
         </div>
       </footer>
