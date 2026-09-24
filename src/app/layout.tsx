@@ -18,6 +18,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Task Tracker Kuliah",
   description: "Aplikasi personal task tracker tugas kuliah dengan integrasi Google Sheets dan Telegram Bot",
+  icons: {
+    icon: [
+      { url: "/logo.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

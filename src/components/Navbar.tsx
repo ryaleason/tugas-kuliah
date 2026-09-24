@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Plus } from 'lucide-react';
 
@@ -10,7 +11,7 @@ interface NavbarProps {
   isConfigured: boolean;
 }
 
-export function Navbar({ onAddNew, isConfigured }: NavbarProps) {
+export function Navbar({ onAddNew, isConfigured: _isConfigured }: NavbarProps) {
   const pathname = usePathname();
 
   return (
@@ -18,7 +19,15 @@ export function Navbar({ onAddNew, isConfigured }: NavbarProps) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Brand & Navigation */}
         <div className="flex items-center gap-4 sm:gap-6">
-          <Link href="/" className="flex items-center gap-2.5 group">
+          <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group">
+            <Image
+              src="/logo.svg"
+              alt="Logo My Tugas Kuliah"
+              width={32}
+              height={32}
+              className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0"
+              priority
+            />
             <h1 className="text-xl sm:text-2xl font-bold text-black tracking-tight leading-none group-hover:underline">
               My Tugas Kuliah
             </h1>
